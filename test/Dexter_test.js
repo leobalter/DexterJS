@@ -89,6 +89,23 @@
     window.$$$$( 'Dexter', 'is', 'here!' );
   });
 
+  test( 'callback()', 4, function() {
+    this.spy.callback = function( a, b, c ) {
+      ok( true, '.callback is set' );
+      deepEqual( [ a, b, c ], [ 1, 2, 3 ], 'callback arguments working' );
+    };
+
+    window.$$$( 1, 2, 3 );
+
+    this.spy.restore();
+
+    this.spy = Dexter.spy( window, '$$$', function() {
+      ok( true, 'callback can be set at spy creation' );
+    });
+
+    window.$$$();
+  });
+
   module( 'Dexter Stub', {
     setup : function() {
       window.$$$ = function() {

@@ -15,8 +15,6 @@
       this.isActive = false;
     };
 
-    callback = function() {};
-
     fnPrototype = {
       called   : 0,
       restore  : restore,
@@ -32,11 +30,11 @@
 
     actions = {
       'spy'  : function( that, args ) {
+                 // calls the original method
                  that._oldCall.apply( this, args );
+                 
                },
-      'stub' : function stub( that, args ) {
-                 that.callback.apply( this, args );
-               } 
+      'stub' : function() { /* hummm, nothing */ } 
     };
 
     function CreateObj( action, obj, method, callback ) {
@@ -61,6 +59,10 @@
 
         that.called = that.called + 1;
         actions[ action ].call( this, that, args );
+        
+        if ( typeof( that.callback ) === 'function' ) {
+          that.callback.apply( this, args );  
+        }
       };
     }
 
