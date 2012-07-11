@@ -5,36 +5,61 @@ Dexter is a simple Test Helper, framework independent.
 ## Getting Started
 Download the [production version][min] or the [development version][max].
 
-[min]: https://raw.github.com/leobalter/Dexter/master/dist/Dexter.min.js
-[max]: https://raw.github.com/leobalter/Dexter/master/dist/Dexter.js
+[min]: https://raw.github.com/leobalter/DexterJS/master/dist/Dexter.min.js
+[max]: https://raw.github.com/leobalter/DexterJS/master/dist/Dexter.js
 
-In your web page:
-
-```html
-<script src="jquery.js"></script>
-<script src="dist/Dexter.min.js"></script>
-<script>
-jQuery(function($) {
-  $.awesome(); // "awesome"
-});
-</script>
-```
 
 ## Documentation
 _(Coming soon)_
 
 ## Examples
-_(Coming soon)_
+
+### Dexter.spy
+
+```javascript
+var spy = Dexter.spy( console, 'log' );
+
+// Spy doesn't prevent function calls but register them.
+console.log( '123' );
+
+spy.called; // 1
+
+// you can restore the spied method to it's default functionality
+stub.restore(); 
+```
+
+### Dexter.stub
+
+```javascript
+var stub = Dexter.stub( console, 'log', function() {
+	// please don't ever consider stubbing console.log to make an alert call
+	// this is only a cheap example
+	alert( 'stub called!' );
+
+	// you can also catch the call arguments
+});
+
+// Stub prevent default function calls and you can trigger a callback function
+console.log( '123' ); // 'stub called!';
+
+stub.called; // 1
+
+// you can restore the stubbed method to it's default functionality
+stub.restore(); 
+```
 
 ## Release History
-_(Nothing yet)_
+2012-07-11 - initial release, stub and spy ready and tested
 
 ## License
 Copyright (c) 2012 Leonardo Balter  
 Licensed under the MIT, GPL licenses.
 
 ## Contributing
-In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [grunt](https://github.com/cowboy/grunt).
+
+1. In lieu of a formal styleguide, take care to maintain the existing coding style and please do follow [idiomatic.js](https://github.com/rwldrn/idiomatic.js).
+2. Add unit tests for any new or changed functionality. 
+3. Lint and test your code using [grunt](https://github.com/cowboy/grunt).
 
 ### Important notes
 Please don't edit files in the `dist` subdirectory as they are generated via grunt. You'll find source code in the `src` subdirectory!
