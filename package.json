@@ -1,0 +1,37 @@
+{
+  "name": "dexter",
+  "title": "Dexter JS",
+  "description": "Dexter is a simple Test Helper, framework independent.",
+  "version": "0.1.0",
+  "homepage": "https://github.com/leobalter/DexterJS",
+  "author": {
+    "name": "Leonardo Balter",
+    "email": "leonardo.balter@gmail.com",
+    "url": "http://leobalter.net"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/leobalter/DexterJS.git"
+  },
+  "bugs": {
+    "url": "https://github.com/leobalter/DexterJS/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/leobalter/DexterJS/blob/master/LICENSE-MIT"
+    },
+    {
+      "type": "GPL",
+      "url": "https://github.com/leobalter/DexterJS/blob/master/LICENSE-GPL"
+    }
+  ],
+  "dependencies": {},
+  "keywords": [],
+  "scripts": {
+    "test": "grunt qunit"
+  },
+  "devDependencies": {
+    "grunt": "~0.3.11"
+  }
+}
