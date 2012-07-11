@@ -10,7 +10,14 @@ Download the [production version][min] or the [development version][max].
 
 
 ## Documentation
-_(Coming soon)_
+
+This's a Test Helper. With Dexter, you can spy functions and create stubs to prevent their default functionality and set callbacks to create your assertions.
+
+It's like Sinon.JS, but this is VERY simple. The goal is to keep it simple and clean.
+
+Fake Ajax handling is comming soon.
+
+_(More documentation coming soon)_
 
 ## Examples
 
