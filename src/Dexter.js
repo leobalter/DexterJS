@@ -8,20 +8,20 @@
 
 (function(globalObj) {
   function dexter() {
-    var restore, toReturn, fnPrototype, actions;
+    var restore, callback, fnPrototype, actions;
 
     restore = function() {
       this._seenObj[ this._seenMethod ] = this._oldCall;
       this.isActive = false;
     };
 
-    toReturn = function() {};
+    callback = function() {};
 
     fnPrototype = {
       called   : 0,
       restore  : restore,
       isActive : true,
-      toReturn : toReturn
+      callback : callback
     };
 
     function setDexterObjs( obj, method ) {
@@ -35,11 +35,11 @@
                  that._oldCall.apply( this, args );
                },
       'stub' : function stub( that, args ) {
-                 that.toReturn.apply( this, args );
+                 that.callback.apply( this, args );
                } 
     };
 
-    function CreateObj( action, obj, method, toReturn ) {
+    function CreateObj( action, obj, method, callback ) {
       var that = this;
 
       if ( typeof( method ) !== 'string' ) {
@@ -50,8 +50,8 @@
         throw 'Dexter should receive a valid object and method combination in arguments. Ex.: window & "alert".';
       }
 
-      if ( typeof( toReturn ) === 'function' ) {
-        this.toReturn = toReturn;
+      if ( typeof( callback ) === 'function' ) {
+        this.callback = callback;
       }
 
       setDexterObjs.call( this, obj, method );
@@ -70,8 +70,8 @@
       return new CreateObj( 'spy', obj, method );
     }
 
-    function newStub( obj, method, toReturn ) {
-      return new CreateObj( 'stub', obj, method, toReturn );
+    function newStub( obj, method, callback ) {
+      return new CreateObj( 'stub', obj, method, callback );
     }
 
     return {

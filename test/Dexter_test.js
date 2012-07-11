@@ -126,10 +126,10 @@
     deepEqual( stub.isActive, false, 'stub.isActive === false after restoring' );
   });
 
-  test( 'toReturn()', 3, function() {
-    this.stub.toReturn = function( a, b, c ) {
-      ok( true, '.toReturn is set' );
-      deepEqual( [ a, b, c ], [ 1, 2, 3 ], 'toReturn arguments working' );
+  test( 'callback()', 3, function() {
+    this.stub.callback = function( a, b, c ) {
+      ok( true, '.callback is set' );
+      deepEqual( [ a, b, c ], [ 1, 2, 3 ], 'callback arguments working' );
     };
 
     window.$$$( 1, 2, 3 );
@@ -137,7 +137,7 @@
     this.stub.restore();
 
     this.stub = Dexter.stub( window, '$$$', function() {
-      ok( true, 'toReturn can be set at stub creation' );
+      ok( true, 'callback can be set at stub creation' );
     });
 
     window.$$$();
