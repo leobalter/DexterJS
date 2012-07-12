@@ -32,7 +32,7 @@ console.log( '123' );
 spy.called; // 1
 
 // you can restore the spied method to it's default functionality
-stub.restore(); 
+spy.restore(); 
 ```
 
 ### Dexter.stub
