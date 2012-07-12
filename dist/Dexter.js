@@ -1,4 +1,4 @@
-/*! Dexter JS - v0.1.0 - 2012-07-11
+/*! Dexter JS - v0.1.0 - 2012-07-12
 * https://github.com/leobalter/DexterJS
 * Copyright (c) 2012 Leonardo Balter; Licensed MIT, GPL */
 
@@ -64,8 +64,8 @@
 
     CreateObj.prototype = fnPrototype;
 
-    function newSpy( obj, method ) {
-      return new CreateObj( 'spy', obj, method );
+    function newSpy( obj, method, callback ) {
+      return new CreateObj( 'spy', obj, method, callback );
     }
 
     function newStub( obj, method, callback ) {

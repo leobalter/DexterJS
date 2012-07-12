@@ -89,7 +89,7 @@
     window.$$$$( 'Dexter', 'is', 'here!' );
   });
 
-  test( 'callback()', 4, function() {
+  test( 'callback()', 5, function() {
     this.spy.callback = function( a, b, c ) {
       ok( true, '.callback is set' );
       deepEqual( [ a, b, c ], [ 1, 2, 3 ], 'callback arguments working' );

@@ -68,8 +68,8 @@
 
     CreateObj.prototype = fnPrototype;
 
-    function newSpy( obj, method ) {
-      return new CreateObj( 'spy', obj, method );
+    function newSpy( obj, method, callback ) {
+      return new CreateObj( 'spy', obj, method, callback );
     }
 
     function newStub( obj, method, callback ) {
