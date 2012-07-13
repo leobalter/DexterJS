@@ -24,12 +24,12 @@
 
   module( 'Environment' );
 
-  test( 'Dexter is here!', function() {
+  test( 'Dexter is here!', 2, function() {
     equal( typeof( Dexter ), 'object', 'Dexter is an object' );
     ok( Dexter, 'Dexter is not falsy' );
   });
 
-  test( 'Dexter functions', function() {
+  test( 'Dexter functions', 2, function() {
     equal( typeof( Dexter.spy ), 'function', 'Dexter.spy is a function' );
     equal( typeof( Dexter.stub ), 'function', 'Dexter.stub is a function' );
   });

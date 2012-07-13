@@ -3,79 +3,70 @@
 * Copyright (c) 2012 Leonardo Balter; Licensed MIT, GPL */
 
 (function(globalObj) {
-  function dexter() {
-    var restore, callback, fnPrototype, actions;
+  var restore, callback, actions;
 
-    restore = function() {
-      this._seenObj[ this._seenMethod ] = this._oldCall;
-      this.isActive = false;
-    };
+  restore = function() {
+    this._seenObj[ this._seenMethod ] = this._oldCall;
+    this.isActive = false;
+  };
 
-    fnPrototype = {
-      called   : 0,
-      restore  : restore,
-      isActive : true,
-      callback : callback
-    };
+  function setDexterObjs( obj, method ) {
+    this._oldCall = obj[ method ];
+    this._seenObj = obj;
+    this._seenMethod = method;
+  }
 
-    function setDexterObjs( obj, method ) {
-      this._oldCall = obj[ method ];
-      this._seenObj = obj;
-      this._seenMethod = method;
+  actions = {
+    'spy'  : function( that, args ) {
+               // calls the original method
+               that._oldCall.apply( this, args );
+               
+             },
+    'stub' : function() { /* hummm, nothing */ } 
+  };
+
+  function DexterObj( action, obj, method, callback ) {
+    var that = this;
+
+    if ( typeof( method ) !== 'string' ) {
+      throw 'Dexter should receive method name as a String';
     }
 
-    actions = {
-      'spy'  : function( that, args ) {
-                 // calls the original method
-                 that._oldCall.apply( this, args );
-                 
-               },
-      'stub' : function() { /* hummm, nothing */ } 
-    };
+    if ( !obj || typeof( obj[ method ] ) !== 'function' ) {
+      throw 'Dexter should receive a valid object and method combination in arguments. Ex.: window & "alert".';
+    }
 
-    function CreateObj( action, obj, method, callback ) {
-      var that = this;
+    if ( typeof( callback ) === 'function' ) {
+      this.callback = callback;
+    }
 
-      if ( typeof( method ) !== 'string' ) {
-        throw 'Dexter should receive method name as a String';
+    setDexterObjs.call( this, obj, method );
+
+    obj[ method ] = function() {
+      var args = [].slice.apply( arguments );
+
+      that.called = that.called + 1;
+      actions[ action ].call( this, that, args );
+      
+      if ( typeof( that.callback ) === 'function' ) {
+        that.callback.apply( this, args );  
       }
-
-      if ( !obj || typeof( obj[ method ] ) !== 'function' ) {
-        throw 'Dexter should receive a valid object and method combination in arguments. Ex.: window & "alert".';
-      }
-
-      if ( typeof( callback ) === 'function' ) {
-        this.callback = callback;
-      }
-
-      setDexterObjs.call( this, obj, method );
-
-      obj[ method ] = function() {
-        var args = [].slice.apply( arguments );
-
-        that.called = that.called + 1;
-        actions[ action ].call( this, that, args );
-        
-        if ( typeof( that.callback ) === 'function' ) {
-          that.callback.apply( this, args );  
-        }
-      };
-    }
-
-    CreateObj.prototype = fnPrototype;
-
-    function newSpy( obj, method, callback ) {
-      return new CreateObj( 'spy', obj, method, callback );
-    }
-
-    function newStub( obj, method, callback ) {
-      return new CreateObj( 'stub', obj, method, callback );
-    }
-
-    return {
-      spy  : newSpy,
-      stub : newStub
     };
   }
-  globalObj.Dexter = dexter();
+
+  DexterObj.prototype = {
+    called   : 0,
+    restore  : restore,
+    isActive : true,
+    callback : callback
+  };
+
+  globalObj.Dexter = {
+    spy  : function( obj, method, callback ) {
+      return new DexterObj( 'spy', obj, method, callback );
+    },
+    stub : function( obj, method, callback ) {
+      return new DexterObj( 'stub', obj, method, callback );
+    }
+  };
 }(this));
