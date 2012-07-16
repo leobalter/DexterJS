@@ -6,11 +6,16 @@
   <!-- Load local QUnit (grunt requires v1.0.0 or newer). -->
   <link rel="stylesheet" href="../libs/qunit/qunit.css" media="screen">
   <script src="../libs/qunit/qunit.js"></script>
-  <!-- Load local lib and tests. -->
+
+  <script src="helper.js"></script>
+  <!-- Load local libs. -->
   <script src="../src/Dexter.js"></script>
+  <script src="../src/fake_ajax.js"></script>
+  <!-- Load local tests. -->
   <script src="Dexter_test.js"></script>
 </head>
 <body>
+
   <h1 id="qunit-header">Dexter JS Test Suite</h1>
   <h2 id="qunit-banner"></h2>
   <div id="qunit-testrunner-toolbar"></div>

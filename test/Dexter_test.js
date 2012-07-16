@@ -29,17 +29,18 @@
     ok( Dexter, 'Dexter is not falsy' );
   });
 
-  test( 'Dexter functions', 2, function() {
+  test( 'Dexter functions', 3, function() {
     equal( typeof( Dexter.spy ), 'function', 'Dexter.spy is a function' );
     equal( typeof( Dexter.stub ), 'function', 'Dexter.stub is a function' );
+    equal( typeof( Dexter.fakeXHR ), 'function', 'Dexter.fakeXHR is a function' );
   });
 
   module( 'Dexter Spy', {
     setup : function() {
-      window.$$$ = function() {
+      foo.bar = function() {
         ok( true, 'spy preserve method calling' );
       };
-      this.spy = Dexter.spy( window, '$$$' );
+      this.spy = Dexter.spy( foo, 'bar' );
     }
   });
 
@@ -48,7 +49,7 @@
     ok( this.spy.isActive, 'spy.isActive === true' );
 
     raises( function() {
-      Dexter.spy( window, 'whateverDoesntExist' );
+      Dexter.spy( foo, 'whateverDoesntExist' );
     }, 'raises an error if method doesnt exist' );
     
     raises( function() {
@@ -56,7 +57,7 @@
     }, 'raises an error without arguments' );
 
     raises( function() {
-      Dexter.spy( window, function() {} );
+      Dexter.spy( foo, function() {} );
     }, 'raises an error if method name isn\'t a string' );
 
   });
@@ -65,7 +66,7 @@
     this.spy.restore();
 
     // 1 ok
-    window.$$$();
+    foo.bar();
 
     deepEqual( this.spy.called, 0, 'restored spy should not be affected by further calls' );
     deepEqual( this.spy.isActive, false, 'spy.isActive === false after restoring' );
@@ -75,18 +76,18 @@
     var i;
     for ( i = 0 ; i < 11 ; ++i ) {
       deepEqual( this.spy.called, i, 'spy.called === ' + i );
-      window.$$$();
+      foo.bar();
     }
   });
 
   test( 'arguments', 1, function() {
-    window.$$$$ = function( a, b, c ) {
+    foo.otherBar = function( a, b, c ) {
       deepEqual( [ a, b, c ], [ 'Dexter', 'is', 'here!' ], 'keeping arguments in the spied call' );
     };
 
-    var spy = Dexter.spy( window, '$$$$' );
+    var spy = Dexter.spy( foo, 'otherBar' );
 
-    window.$$$$( 'Dexter', 'is', 'here!' );
+    foo.otherBar( 'Dexter', 'is', 'here!' );
   });
 
   test( 'callback()', 5, function() {
@@ -95,23 +96,23 @@
       deepEqual( [ a, b, c ], [ 1, 2, 3 ], 'callback arguments working' );
     };
 
-    window.$$$( 1, 2, 3 );
+    foo.bar( 1, 2, 3 );
 
     this.spy.restore();
 
-    this.spy = Dexter.spy( window, '$$$', function() {
+    this.spy = Dexter.spy( foo, 'bar', function() {
       ok( true, 'callback can be set at spy creation' );
     });
 
-    window.$$$();
+    foo.bar();
   });
 
   module( 'Dexter Stub', {
     setup : function() {
-      window.$$$ = function() {
+      foo.bar = function() {
         ok( false, 'stub shoud not call original stubbed method' );
       };
-      this.stub = Dexter.stub( window, '$$$' );
+      this.stub = Dexter.stub( foo, 'bar' );
     }
   });
 
@@ -124,20 +125,20 @@
     var i;
     for ( i = 0 ; i < 11 ; ++i ) {
       deepEqual( this.stub.called, i, 'stub.called === ' + i );
-      window.$$$();
+      foo.bar();
     }
   });
 
   test( 'restore()', function() {
-    window.$$$$ = function() {
+    foo.otherBar = function() {
       ok( true, 'stub restore objects' );
     };
 
-    var stub = Dexter.stub( window, '$$$$' );
+    var stub = Dexter.stub( foo, 'otherBar' );
 
     stub.restore();
 
-    window.$$$$();
+    foo.otherBar();
 
     deepEqual( stub.called, 0, 'restored stub should not be affected by further calls' );
     deepEqual( stub.isActive, false, 'stub.isActive === false after restoring' );
@@ -149,15 +150,51 @@
       deepEqual( [ a, b, c ], [ 1, 2, 3 ], 'callback arguments working' );
     };
 
-    window.$$$( 1, 2, 3 );
+    foo.bar( 1, 2, 3 );
 
     this.stub.restore();
 
-    this.stub = Dexter.stub( window, '$$$', function() {
+    this.stub = Dexter.stub( foo, 'bar', function() {
       ok( true, 'callback can be set at stub creation' );
     });
 
-    window.$$$();
+    foo.bar();
   });
+
+  module( 'fakeXHR' );
+
+  test( 'XMLHttpRequest substitution', function() {
+    var myFake,
+        expected = 0;
+
+    // Can´t run some tests regarding browser limitations
+    if ( window.XMLHttpRequest ) {
+      expected += 3;
+
+      strictEqual( typeof( XMLHttpRequest.prototype.__DexterXHR ), 'undefined', 'untouched XMLHttpRequest' );
+
+      myFake = Dexter.fakeXHR();
+      ok( XMLHttpRequest.prototype.__DexterXHR, 'Dexter fakes XMLHttpRequest' );
+
+      myFake.restore();
+      strictEqual( typeof( XMLHttpRequest.prototype.__DexterXHR ), 'undefined', 'original XMLHttpRequest after .restore() ' );
+    }
+
+    if ( window.ActiveXObject ) {
+      expected += 3;
+
+      strictEqual( typeof( XMLHttpRequest.prototype.__DexterXHR ), 'undefined', 'untouched ActiveXObject' );
+
+      myFake = Dexter.fakeXHR();
+      ok( XMLHttpRequest.prototype.__DexterXHR, 'Dexter fakes ActiveXObject' );
+
+      myFake.restore();
+      strictEqual( typeof( XMLHttpRequest.prototype.__DexterXHR ), 'undefined', 'original ActiveXObject after .restore() ' );
+    }
+
+    expect( expected );
+    
+  });
+
 
 }(this));
