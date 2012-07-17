@@ -102,6 +102,21 @@
     'Via'
   ];
 
+  // IE7
+  if ( typeof( Array.prototype.indexOf ) === 'undefined' ) {
+    unsafeHeaders.indexOf = function( key, start ) {
+      var i = ( start || 0 ),
+          length = this.length;
+
+      for ( ; i < length ; i++ ) {
+        if ( this[ i ] === key ) {
+          return i;
+        }
+      }
+      return -1;
+    };
+  }
+
   /***
    * verifyState helps verifying XHR readyState in cases when that should be 
    * 1 (Opened) and sendFlag can´t be true. (not yet sent request)
@@ -253,6 +268,7 @@
 
       // key shouldn´t be one of the unsafeHeaders neither start with Sec- or
       // Proxy-
+
       if ( ( unsafeHeaders.indexOf( key ) >= 0 ) || /^(Sec-|Proxy-)/.test( key ) ) {
         throw new Error( 'Refused to set unsafe header "' + key + '"' );
       }
@@ -298,9 +314,17 @@
       this.readyState = state;
       
       if ( typeof this.onreadystatechange === 'function' ) {
-        // dumb event creation. "new Event" just fire errors in webkit engines
-        ev = document.createEvent( 'Event' );
-        ev.initEvent( 'readystatechange', false, false );
+        try {
+          // dumb event creation. "new Event" just fire errors in webkit engines
+          ev = document.createEvent( 'Event' );
+          ev.initEvent( 'readystatechange', false, false );
+        } catch (e) {
+          // dammit, IE7!
+          // TODO: this would break anyone´s code?
+          ev = {
+            type : 'readystatechange'
+          };
+        }
 
         // the event goes inside an Array
         this.onreadystatechange.call( this, [ ev ] );
