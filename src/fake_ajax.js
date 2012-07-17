@@ -113,11 +113,13 @@
   }
 
   fakeXHRObj = {
+    // Status constants
     UNSENT                  : 0,
     OPENED                  : 1,
     HEADERS_RECEIVED        : 2,
     LOADING                 : 3,
     DONE                    : 4,
+    // event handlers
     onabort                 : null,
     onerror                 : null,
     onload                  : null,
@@ -126,19 +128,25 @@
     onprogress              : null,
     onreadystatechange      : null,
     ontimeout               : null,
+    // readyState always start by 0
     readyState              : 0,
+    // other properties
     response                : "",
     responseText            : "",
     responseType            : "",
     responseXML             : null,
-    status                  : 0,
-    statusText              : "",
-    timeout                 : 0,
     withCredentials         : false,
+    // status code
+    status                  : 0,
+    // status text relative to the status code
+    statusText              : "",
+    // timeout to be set, starts by 0
+    timeout                 : 0,
     /***
      * fake .abort
      ***/
     abort                   : function() {
+      // reseting properties
       this.aborted = true;
       this.errorFlag = true;
       this.method = null;
@@ -150,6 +158,7 @@
       this.responseXML = null;
       this.requestHeaders = {};
       this.sendFlag = false;
+      // triggering readystatechange
       if ( this.readyState > this.UNSENT && this.sendFlag ) {
         this.__DexterStateChange( this.DONE );
       } else {
@@ -163,33 +172,41 @@
     getResponseHeader      : function( key ) {
       var headerName,
           responseHeaders = this.responseHeaders;
+      // no return before receiving headers
       if ( this.readyState < this.HEADERS_RECEIVED ) {
         return null;
       }
 
+      // no return for Set-Cookie2
       if ( /^Set-Cookie2?$/i.test( key ) ) {
         return null;
       }
 
+      // we manage key finding to different letter cases
       key = key.toLowerCase();
 
       for ( headerName in responseHeaders ) {
         if ( responseHeaders.hasOwnProperty( headerName ) ) {
+          // do we have that key?
           if ( headerName.toLowerCase() === key ) {
+            // se we return its value
             return responseHeaders[ headerName ];
           }  
         }
       }
 
+      // no success, return null
       return null;
     },
     /***
      * fake .open
      ***/
     open                    : function( method, url, async, username, password ) {
+      // method and url aren´t optional
       if ( typeof( method ) === 'undefined' || typeof( url ) === 'undefined' ) {
         throw new Error( 'Not enough arguments' );
       }
+      // setting properties
       this.method = method;
       this.url = url;
 
@@ -199,22 +216,30 @@
 
       this.username = username;
       this.password = password;
+      // cleaning these properties
       this.responseText = null;
       this.responseXML = null;
       this.requestHeaders = {};
       this.sendFlag = false;
+
+      // triggering readystatechange with Opened status
       this.__DexterStateChange( this.OPENED );
     },
     /***
      * fake .send 
      ***/
     send                    : function( data ) {
+      // readyState verification (xhr should be already opened)
       verifyState( this.readyState, this.sendFlag );
 
+      // setting properties
       this.errorFlag = false;
       this.sendFlag = this.async;
+
+      // trigger readystatechange with Opened status
       this.__DexterStateChange( this.OPENED );
 
+      // hummm if think I won´t need this, omg, where´s the specification
       if ( typeof( this.onSend ) === 'function' ) {
           this.onSend( this );
       }
@@ -223,15 +248,20 @@
      * fake .setRequestHeader 
      ***/
     setRequestHeader        : function( key, value ) {
+      // readyState verification (xhr should be already opened)
       verifyState( this.readyState, this.sendFlag );
 
+      // key shouldn´t be one of the unsafeHeaders neither start with Sec- or
+      // Proxy-
       if ( ( unsafeHeaders.indexOf( key ) >= 0 ) || /^(Sec-|Proxy-)/.test( key ) ) {
         throw new Error( 'Refused to set unsafe header "' + key + '"' );
       }
 
       if ( this.requestHeaders[ key ] ) {
+        // if we already have this key set, we concatenate values
         this.requestHeaders[ key ] += "," + value;
       } else {
+        // or we just set key and value
         this.requestHeaders[ key ] = value;
       }
     },
@@ -242,7 +272,7 @@
     // TODO: test
     __DexterSetResponseHeaders: function __DexterSetResponseHeaders( headers ) {
       var header;
-
+      // reseting response headers
       this.responseHeaders = {};
 
       for ( header in headers ) {
@@ -251,6 +281,7 @@
         }
       }
 
+      // async requests should trigger readystatechange event
       if ( this.async ) {
         this.readyStateChange( this.HEADERS_RECEIVED );
       }
@@ -267,6 +298,7 @@
       this.readyState = state;
       
       if ( typeof this.onreadystatechange === 'function' ) {
+        // dumb event creation. "new Event" just fire errors in webkit engines
         ev = document.createEvent( 'Event' );
         ev.initEvent( 'readystatechange', false, false );
 
