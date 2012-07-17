@@ -127,6 +127,24 @@
     }
   }
 
+  /***
+   * string to XML parser. Got this from SinonJS that got the same from JSpec
+   ***/
+  function parseXML( text ) {
+    var xmlDoc;
+
+    if ( typeof globalObj.DOMParser !== 'undefined' ) {
+        var parser = new DOMParser();
+        xmlDoc = parser.parseFromString( text, 'text/xml' );
+    } else {
+        xmlDoc = new ActiveXObject( 'Microsoft.XMLDOM' );
+        xmlDoc.async = "false";
+        xmlDoc.loadXML( text );
+    }
+
+    return xmlDoc;
+  }
+
   fakeXHRObj = {
     // Status constants
     UNSENT                  : 0,
@@ -282,11 +300,31 @@
       }
     },
     /***
+     * fake getAllResponseHeaders
+     * TODO: tests
+     ***/
+    getAllResponseHeaders   : function() {
+      var headers = "",
+          header;
+
+      if ( this.readyState < this.HEADERS_RECEIVED ) {
+        return "";
+      }
+
+      for ( header in this.responseHeaders ) {
+          if ( this.responseHeaders.hasOwnProperty( header ) && !/^Set-Cookie2?$/i.test( header ) ) {
+              headers += header + ": " + this.responseHeaders[ header ] + "\r\n";
+          }
+      }
+
+      return headers;
+    },
+    /***
      * __DexterSetResponseHeaders set xhr response headers to make arrangements
      * before completing the fake ajax request
      ***/
     // TODO: test
-    __DexterSetResponseHeaders: function __DexterSetResponseHeaders( headers ) {
+    __DexterSetResponseHeaders: function( headers ) {
       var header;
       // reseting response headers
       this.responseHeaders = {};
@@ -331,13 +369,73 @@
       }
     },
     /***
-     * not implemented yet XHR functions
+     * __DexterSetResponseBody builds the response text.
+     * TODO: tests
      ***/
-    upload                  : function() {},
-    getAllResponseHeaders   : function() {},
-    getInterface            : function() {},
-    overrideMimeType        : function() {},
-    sendAsBinary            : function() {}
+    __DexterSetResponseBody   : function( body ) {
+      var chunkSize = this.chunkSize || 10,
+          index = 0,
+          type;
+
+      this.responseText = "";
+
+      while ( index <= body.length ) {
+        if ( this.async ) {
+          this.readyStateChange( this.LOADING );
+        }
+        this.responseText += body.substring( index, ( index += chunkSize ) );
+      } 
+
+      type = this.getResponseHeader( 'Content-Type' ) || '';
+
+      if ( this.responseText && ( /(text\/xml)|(application\/xml)|(\+xml)/.test( type ) ) ) {
+        try {
+          this.responseXML = parseXML( this.responseText );
+        } catch ( e ) {
+          // Unable to parse XML - no biggie
+        }
+      }
+    },
+    /***
+     * __DexterRespond is the call to complete a ajax request
+     * @params {
+     *   body : string with responseText (Default: '')
+     *   headers : responseHeaders (Default: {})
+     *   status : Number status code (Default: 200)
+     * }
+     * TODO: tests
+     ***/
+    __DexterRespond         : function( params ) {
+      var error = false,
+          body = params.body || '',
+          headers = params.headers || {},
+          DONE = this.DONE;
+
+      this.__DexterSetResponseHeaders( headers );
+      this.status = params.status || 200;
+      this.statusText = statusCodes[ this.status ];
+
+      if ( this.readyState === DONE ) {
+        throw new Error( 'Request already done' );
+      }
+ 
+      this.__DexterSetResponseBody( body );
+
+      // triggers the readystatechange if is an async request
+      if ( this.async ) {
+        this.readyStateChange( DONE );
+      } else {
+        // not being async, just set readyState value
+        this.readyState = DONE;
+      }
+    }
+    /***
+     * not implemented yet XHR functions
+     * upload                  : function() {},
+     * getInterface            : function() {},
+     * overrideMimeType        : function() {},
+     * sendAsBinary            : function() {}
+     ***/
   };
 
   /***
@@ -401,9 +499,20 @@
    * its returned object. Not on the XHR itself.
    ***/
   CreateFakeXHR.prototype = {
-    // TODO: implementation and test
-    respond : function( status, data ) {
-        /* not yet */
+    // TODO: tests
+    respond : function( params, index ) {
+      var xhr;
+      if ( index ) {
+        // if index number is set return that indexed element
+        xhr = this.requests.splice( index, 1 );
+      } else {
+        // else it gets the first request in line
+        xhr = this.requests.shift();
+      }
+      xhr.__DexterRespond( params );
+
+      // selected xhr will be seen on doneRequests collection
+      this.doneRequests.push( xhr );
     },
     /***
      * restore the XHR objects to their original states, defaking them
@@ -422,7 +531,8 @@
      * requests will contain all requests made on the fakeXHR object´s lifecycle
      * doing so, they can be monitored via Dexter.fakeXHR´s instance
      ***/
-    requests : []
+    requests : [],
+    doneRequests : []
   };
 
   /***
@@ -432,4 +542,4 @@
     return new CreateFakeXHR();
   };
 
-}(this, Dexter));
+}( this, Dexter ));
