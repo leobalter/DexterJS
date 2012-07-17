@@ -1,6 +1,7 @@
 /*global QUnit:false, module:false, test:false, asyncTest:false, expect:false*/
 /*global start:false, stop:false ok:false, equal:false, notEqual:false, deepEqual:false*/
 /*global notDeepEqual:false, strictEqual:false, notStrictEqual:false, raises:false*/
+/*global foo:true, getXHR:true*/
 (function(window) {
 
   /*
@@ -163,7 +164,7 @@
 
   module( 'fakeXHR' );
 
-  test( 'XMLHttpRequest substitution', function() {
+  test( 'XMLHttpRequest/ActiveXObject substitutions', function() {
     var myFake,
         expected = 0;
 
@@ -186,7 +187,7 @@
       strictEqual( typeof( XMLHttpRequest.prototype.__DexterXHR ), 'undefined', 'untouched ActiveXObject' );
 
       myFake = Dexter.fakeXHR();
-      ok( XMLHttpRequest.prototype.__DexterXHR, 'Dexter fakes ActiveXObject' );
+      ok( XMLHttpRequest.prototype.__DexterXHR, 'Dexter fakes ActiveXObject' ); 
 
       myFake.restore();
       strictEqual( typeof( XMLHttpRequest.prototype.__DexterXHR ), 'undefined', 'original ActiveXObject after .restore() ' );
@@ -194,6 +195,182 @@
 
     expect( expected );
     
+  });
+
+  test( 'registering requests', 5, function() {
+    var myFake = Dexter.fakeXHR(),
+        xhr,
+        xhr2;
+
+    strictEqual( myFake.requests.length, 0, 'myFake.requests.length === 0 (before new XHR)' );
+    xhr = getXHR();
+    strictEqual( myFake.requests.length, 1, 'myFake.requests.length === 1 (after new XHR)' );
+    strictEqual( myFake.requests[0], xhr, 'myFake.requests[0] === xhr object' );
+
+    xhr2 = getXHR();
+    strictEqual( myFake.requests.length, 2, 'myFake.requests.length === 1 (after new XHR)' );
+    strictEqual( myFake.requests[1], xhr2, 'myFake.requests[0] === xhr object' );
+
+    myFake.restore();
+  });
+
+  module( 'fakeXHR methods', {
+    setup : function() {
+      this.myFake = Dexter.fakeXHR();
+      this.xhr = getXHR();
+    },
+    tearDown : function() {
+      this.myFake.restore();
+    }
+  });
+
+  test( '.open()', 9, function() {
+    var myFake = this.myFake,
+        xhr = this.xhr;
+
+    raises( function() {
+      xhr.open();
+    }, 'xhr.open() [no args] raises error' );
+
+    raises( function() {
+      xhr.open( 'GET' );
+    }, 'xhr.open( "GET" ) [1 arg] raises error' );
+
+    strictEqual( xhr.readyState, 0, 'readyState starts at 0' );
+
+    xhr.open( 'GET', '/' );
+
+    strictEqual( xhr.readyState, 1, 'readyState == 1 after .open()' );
+    strictEqual( xhr.async, true, 'xhr.async defaults to true' );
+    strictEqual( xhr.sendFlag, false, 'xhr.sendFlag === false' );
+
+    xhr.open( 'POST', '/', false, 'leo', 'balter' );
+
+    strictEqual( xhr.async, false, 'xhr.async false setting' );
+    strictEqual( xhr.username, 'leo' );
+    strictEqual( xhr.password, 'balter' );
+  });
+
+  test( '.open() => readyStateChange event', 3, function() {
+    var xhr = this.xhr;
+
+    xhr.onreadystatechange = function( ev ) {
+      ok( true, 'readyStateChange event fired' );
+      strictEqual( this, xhr, 'xhr object === this' );
+      equal( ev[0].type, 'readystatechange', 'ev.type === readystatechange' );
+    };
+
+    xhr.open( 'GET', '/' );
+  });
+
+  test( '.abort()', 4, function() {
+    var xhr = this.xhr;
+
+    xhr.open( 'GET', '/' );
+
+    xhr.abort();
+
+    strictEqual( xhr.readyState, 0, 'aborted xhr.readyState returns to 0' );
+    ok( xhr.aborted, 'xhr.aborted === true' );
+    strictEqual( xhr.sendFlag, false, 'xhr.sendFlag === false' );
+    ok( xhr.errorFlag, 'xhr.errorFlag === true' );
+  });
+
+  test( '.abort() => readyStateChange event', 1, function() {
+    var xhr = this.xhr;
+
+    xhr.open( 'GET', '/' );
+    xhr.onreadystatechange = function() {
+      ok( true, 'readystatechange event fired on .abort()' );
+    };
+
+    xhr.abort();
+  });
+  
+  test( '.setRequestHeader()', 7, function() {
+    var xhr = this.xhr;
+
+    raises( function() {
+      xhr.setRequestHeader();
+    }, 'calling setRequestHeaders without readyState === 1 raises an error' );
+
+    xhr.open( 'GET', '/' );
+
+    xhr.sendFlag = true;
+    raises( function() {
+      xhr.setRequestHeader();
+    }, 'calling setRequestHeaders with xhr.sendFlag == true raises an error' );
+
+    xhr.sendFlag = false;
+
+    raises( function() {
+      xhr.setRequestHeader( 'Keep-Alive', '123' );
+    }, 'unsafe header raises an error' );
+
+    raises( function() {
+      xhr.setRequestHeader( 'Sec-Test', '123' );
+    }, 'unsafe header (Sec-) raises an error' );
+
+    raises( function() {
+      xhr.setRequestHeader( 'Proxy-Test', '123' );
+    }, 'unsafe header (Proxy-) raises an error' );
+
+    xhr.setRequestHeader( 'Dexter', 'JS' );
+
+    deepEqual( xhr.requestHeaders, { 'Dexter' : 'JS' }, 'requestHeader is set' );
+
+    xhr.setRequestHeader( 'Dexter', 'JS' );
+
+    deepEqual( xhr.requestHeaders, { 'Dexter' : 'JS,JS' }, 'requestHeader concatenates the value' );
+  });
+
+  test( '.getResponseHeader()', 4, function() {
+    var xhr = this.xhr;
+
+    xhr.open( 'GET', '/' );
+
+    xhr.responseHeaders = { 'Dexter': 'JS' };
+
+    equal( xhr.getResponseHeader( 'Dexter' ), null, 'without readyState == 2, getResponseHeader returns null' );
+
+    // 2 == HEADERS_RECEIVED
+    xhr.readyState = 2;
+
+    strictEqual( xhr.getResponseHeader( 'Dexter' ), 'JS', 'getResponseHeader returns header value' );
+
+    equal( xhr.getResponseHeader( 'Set-Cookie2' ), null, 'Set-Cookie2 in getResponseHeader returns null' );
+
+    equal( xhr.getResponseHeader( 'Nothing' ), null, 'no header => null return' );
+  });
+
+  test( '.send()', 6, function() {
+    var xhr = this.xhr;
+
+    xhr.sendFlag = false;
+    raises( function() {
+      xhr.send( 'a=a' );
+    }, 'send() before open raises an error' );
+
+    xhr.open( 'GET', '/' );
+    xhr.sendFlag = true;
+    raises( function() {
+      xhr.send( 'a=b' );
+    }, 'send() with xhr.sendFlag = true raises an error' );
+
+    xhr.sendFlag = false;
+
+    xhr.onSend = function() {
+      ok( true, '.onSend callback' );
+    };
+
+    xhr.onreadystatechange = function() {
+      ok( true, '.onreadystatechange callback' );
+    };
+
+    xhr.send( 'a=c' );
+
+    equal( xhr.readyState, 1, 'opened readyState' );
+    strictEqual( xhr.errorFlag, false, 'falsy errorFlag' );
   });
 
 

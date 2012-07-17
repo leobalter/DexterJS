@@ -1,9 +1,9 @@
-/*globals ActiveXObject:true,Dexter:true*/
-(function( globalObj, Dexter ) {
+/*globals ActiveXObject:true,Dexter:true,document:true*/
+(function( globalObj, Dexter, undefined ) {
   /* var declarations */
   var ajaxObjs = {},
       statusCodes,
-      readyStates,
+      unsafeHeaders,
       fakeXHRObj,
       CreateFakeXHR;
 
@@ -79,16 +79,53 @@
     505: "HTTP Version Not Supported"
   };
 
-  readyStates = {
-    UNSENT           : 0,
-    OPENED           : 1,
-    HEADERS_RECEIVED : 2,
-    LOADING          : 3,
-    DONE             : 4
-  };
+  unsafeHeaders = [
+    'Accept-Charset',
+    'Accept-Encoding',
+    'Connection',
+    'Content-Length',
+    'Cookie',
+    'Cookie2',
+    'Content-Transfer-Encoding',
+    'Date',
+    'Expect',
+    'Host',
+    'Keep-Alive',
+    'Referer',
+    'TE',
+    'Trailer',
+    'Transfer-Encoding',
+    'Upgrade',
+    'User-Agent',
+    'Via'
+  ];
+
+  function verifyState( state, sendFlag ) {
+    // 1 === OPENED
+    if ( state !== 1 || sendFlag ) {
+        throw new Error( 'INVALID_STATE_ERR' );
+    }
+  }
 
   fakeXHRObj = {
     __DexterXHR             : true,
+    __DexterStateChange     : function( state ) {
+      var ev;
+      this.readyState = state;
+      
+      if ( typeof this.onreadystatechange === 'function' ) {
+        ev = document.createEvent( 'Event' );
+        ev.initEvent( 'readystatechange', false, false );
+
+        // the event goes inside an Array
+        this.onreadystatechange.call( this, [ ev ] );
+      }
+    },
+    UNSENT                  : 0,
+    OPENED                  : 1,
+    HEADERS_RECEIVED        : 2,
+    LOADING                 : 3,
+    DONE                    : 4,
     onabort                 : null,
     onerror                 : null,
     onload                  : null,
@@ -97,7 +134,7 @@
     onprogress              : null,
     onreadystatechange      : null,
     ontimeout               : null,
-    readyState              : readyStates.UNSENT,
+    readyState              : 0,
     response                : "",
     responseText            : "",
     responseType            : "",
@@ -105,47 +142,145 @@
     status                  : 0,
     statusText              : "",
     timeout                 : 0,
-    upload                  : function() {},
     withCredentials         : false,
-    abort                   : function() {},
+    abort                   : function() {
+      this.aborted = true;
+      this.errorFlag = true;
+      this.method = null;
+      this.url = null;
+      this.async = undefined;
+      this.username = null;
+      this.password = null;
+      this.responseText = null;
+      this.responseXML = null;
+      this.requestHeaders = {};
+      this.sendFlag = false;
+      if ( this.readyState > this.UNSENT && this.sendFlag ) {
+        this.__DexterStateChange( this.DONE );
+      } else {
+        this.__DexterStateChange( this.UNSENT );  
+      }
+      
+    },
+    getResponseHeader      : function( key ) {
+      var headerName,
+          responseHeaders = this.responseHeaders;
+      if ( this.readyState < this.HEADERS_RECEIVED ) {
+        return null;
+      }
+
+      if ( /^Set-Cookie2?$/i.test( key ) ) {
+        return null;
+      }
+
+      key = key.toLowerCase();
+
+      for ( headerName in responseHeaders ) {
+        if ( responseHeaders.hasOwnProperty( headerName ) ) {
+          if ( headerName.toLowerCase() === key ) {
+            return responseHeaders[ headerName ];
+          }  
+        }
+      }
+
+      return null;
+    },
+    open                    : function( method, url, async, username, password ) {
+      if ( typeof( method ) === 'undefined' || typeof( url ) === 'undefined' ) {
+        throw new Error( 'Not enough arguments' );
+      }
+      this.method = method;
+      this.url = url;
+
+      // async default is true, so if async is undefined it is set to true,
+      // otherwise async get its boolean value
+      this.async = ( typeof( async ) === 'undefined' ? true : !!async );
+
+      this.username = username;
+      this.password = password;
+      this.responseText = null;
+      this.responseXML = null;
+      this.requestHeaders = {};
+      this.sendFlag = false;
+      this.__DexterStateChange( this.OPENED );
+    },
+    send                    : function( data ) {
+      verifyState( this.readyState, this.sendFlag );
+
+      this.errorFlag = false;
+      this.sendFlag = this.async;
+      this.__DexterStateChange( this.OPENED );
+
+      if ( typeof( this.onSend ) === 'function' ) {
+          this.onSend( this );
+      }
+    },
+    setRequestHeader        : function( key, value ) {
+      verifyState( this.readyState, this.sendFlag );
+
+      if ( ( unsafeHeaders.indexOf( key ) >= 0 ) || /^(Sec-|Proxy-)/.test( key ) ) {
+        throw new Error( 'Refused to set unsafe header "' + key + '"' );
+      }
+
+      if ( this.requestHeaders[ key ] ) {
+        this.requestHeaders[ key ] += "," + value;
+      } else {
+        this.requestHeaders[ key ] = value;
+      }
+    },
+    // TODO: test
+    __DexterSetResponseHeaders: function setResponseHeaders( headers ) {
+      var header;
+
+      this.responseHeaders = {};
+
+      for ( header in headers ) {
+        if ( headers.hasOwnProperty( header ) ) {
+          this.responseHeaders[ header ] = headers[ header ];
+        }
+      }
+
+      if ( this.async ) {
+        this.readyStateChange( this.HEADERS_RECEIVED );
+      }
+    },
+    upload                  : function() {},
     getAllResponseHeaders   : function() {},
     getInterface            : function() {},
-    open                    : function() {},
     overrideMimeType        : function() {},
-    send                    : function() {},
-    sendAsBinary            : function() {},
-    setRequestHeader        : function() {}
+    sendAsBinary            : function() {}
   };
 
   CreateFakeXHR = function() {
     var DexterXHR = this,
+        FakeRequest,
         FakeXMLHttpRequest,
         FakeActiveXObject;
 
-    FakeXMLHttpRequest = function() {
-      var args = [].slice.call( arguments ),
-          xhrCall = {
-              type  : 'XMLHttpRequest'
-          };
-      // DexterXHR.requests.push( xhrCall );
-      [].push.call( DexterXHR, xhrCall );
+    FakeRequest = function( argsObj, type ) {
+      var args = [].slice.call( arguments );
+      
+      // creating a reference of xhr object in Dexter.fakeXHR() object
+      DexterXHR.requests.push( this );
 
-      return this;
-    };
+      this.__DexterRef = Date.now();
 
-    FakeActiveXObject = function() {
-      var args = [].slice.call( arguments ),
-          xhrCall = {
-              type  : 'ActiveXObject'
-          };
-      // DexterXHR.requests.push( xhrCall );
-      [].push.call( DexterXHR, xhrCall );
-
-      if ( args[0] !== 'Microsoft.XMLHTTP' ) {
+      if ( type === 'ActiveXObject' && args[0] !== 'Microsoft.XMLHTTP' ) {
           return ajaxObjs( args );
       } else {
           return this;
       }
+    };
+
+    // I can sacrifice these 2 to improve in performance,
+    // how dumb can be the ActiveXObject detection?
+    // I'm not feeling I'll need this.
+    FakeXMLHttpRequest = function() {
+      FakeRequest.call( this, arguments, 'XMLHttpRequest' );
+    };
+
+    FakeActiveXObject = function() {
+      FakeRequest.call( this, arguments, 'ActiveXObject' );
     };
 
     FakeXMLHttpRequest.prototype = fakeXHRObj;
@@ -161,6 +296,7 @@
   };
 
   CreateFakeXHR.prototype = {
+    // TODO: implementation and test
     respond : function( status, data ) {
         /* not yet */
     },
@@ -172,7 +308,8 @@
         if ( ajaxObjs.actX ) {
             globalObj.ActiveXObject = ajaxObjs.actX;
         }
-    }
+    },
+    requests : []
   };
 
   Dexter.fakeXHR = function fakeXHR() {
