@@ -22,15 +22,24 @@
 
   actions = {
     'spy'  : function( that, args ) {
+               if ( typeof( that.callback ) === 'function' ) {
+                 that.callback.apply( this, args );  
+               }
                // calls the original method
-               that._oldCall.apply( this, args );
+               return that._oldCall.apply( this, args );
                
              },
-    'stub' : function() { /* hummm, nothing */ } 
+    'stub' : function( that, args ) { 
+               if ( typeof( that.callback ) === 'function' ) {
+                 return that.callback.apply( this, args );  
+               }  
+             }
   };
 
   function DexterObj( action, obj, method, callback ) {
     var that = this;
+    this.called = 0;
+    this.isActive = true;
 
     if ( typeof( method ) !== 'string' ) {
       throw 'Dexter should receive method name as a String';
@@ -50,19 +59,13 @@
       var args = [].slice.apply( arguments );
 
       that.called = that.called + 1;
-      actions[ action ].call( this, that, args );
-      
-      if ( typeof( that.callback ) === 'function' ) {
-        return that.callback.apply( this, args );  
-      }
+
+      return actions[ action ].call( this, that, args );
     };
   }
 
   DexterObj.prototype = {
-    called   : 0,
-    restore  : restore,
-    isActive : true,
-    callback : callback
+    restore  : restore
   };
 
   globalObj.Dexter = {

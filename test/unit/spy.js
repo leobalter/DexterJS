@@ -27,6 +27,7 @@
     setup : function() {
       foo.bar = function() {
         ok( true, 'spy preserve method calling' );
+				return 'foo!';
       };
       this.spy = Dexter.spy( foo, 'bar' );
     }
@@ -78,7 +79,7 @@
     foo.otherBar( 'Dexter', 'is', 'here!' );
   });
 
-  test( 'callback()', 5, function() {
+  test( 'callback()', 6, function() {
     this.spy.callback = function( a, b, c ) {
       ok( true, '.callback is set' );
       deepEqual( [ a, b, c ], [ 1, 2, 3 ], 'callback arguments working' );
@@ -90,8 +91,9 @@
 
     this.spy = Dexter.spy( foo, 'bar', function() {
       ok( true, 'callback can be set at spy creation' );
+			return 'bar!';
     });
 
-    foo.bar();
+    strictEqual( foo.bar(), 'foo!', 'spy preserves returned value' );
   });
 }( this ) );
