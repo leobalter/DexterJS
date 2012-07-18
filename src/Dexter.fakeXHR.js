@@ -513,6 +513,7 @@
     respond : function( params, index ) {
       var xhr;
 
+      params = params || {};
       if ( index ) {
         // if index number is set return that indexed element
         xhr = this.requests.splice( index, 1 )[0];
