@@ -13,13 +13,14 @@ module.exports = function(grunt) {
     },
     concat: {
       dist: {
-        src: ['<banner:meta.banner>', '<file_strip_banner:src/<%= pkg.name %>.js>'],
+        src: [ '<banner:meta.banner>', '<file_strip_banner:src/<%= pkg.name %>.js>', 
+              '<file_strip_banner:src/<%= pkg.name %>.fakeXHR.js' ],
         dest: 'dist/<%= pkg.name %>.js'
       }
     },
     min: {
       dist: {
-        src: ['<banner:meta.banner>', '<config:concat.dist.dest>'],
+        src: [ '<banner:meta.banner>', '<config:concat.dist.dest>' ],
         dest: 'dist/<%= pkg.name %>.min.js'
       }
     },
@@ -45,7 +46,8 @@ module.exports = function(grunt) {
         undef: true,
         boss: true,
         eqnull: true,
-        browser: true
+        browser: true,
+        onevar: true
       },
       globals: {
         Dexter: true

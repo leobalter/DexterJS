@@ -131,14 +131,15 @@
    * string to XML parser. Got this from SinonJS that got the same from JSpec
    ***/
   function parseXML( text ) {
-    var xmlDoc;
+    var xmlDoc,
+        parser;
 
     if ( typeof globalObj.DOMParser !== 'undefined' ) {
-        var parser = new DOMParser();
+        parser = new globalObj.DOMParser();
         xmlDoc = parser.parseFromString( text, 'text/xml' );
     } else {
         xmlDoc = new ActiveXObject( 'Microsoft.XMLDOM' );
-        xmlDoc.async = "false";
+        xmlDoc.async = 'false';
         xmlDoc.loadXML( text );
     }
 
@@ -301,19 +302,18 @@
     },
     /***
      * fake getAllResponseHeaders
-     * TODO: tests
      ***/
     getAllResponseHeaders   : function() {
-      var headers = "",
+      var headers = '',
           header;
 
       if ( this.readyState < this.HEADERS_RECEIVED ) {
-        return "";
+        return '';
       }
 
       for ( header in this.responseHeaders ) {
           if ( this.responseHeaders.hasOwnProperty( header ) && !/^Set-Cookie2?$/i.test( header ) ) {
-              headers += header + ": " + this.responseHeaders[ header ] + "\r\n";
+              headers += header + ': ' + this.responseHeaders[ header ] + '\r\n';
           }
       }
 
@@ -323,7 +323,6 @@
      * __DexterSetResponseHeaders set xhr response headers to make arrangements
      * before completing the fake ajax request
      ***/
-    // TODO: test
     __DexterSetResponseHeaders: function( headers ) {
       var header;
       // reseting response headers
@@ -337,7 +336,7 @@
 
       // async requests should trigger readystatechange event
       if ( this.async ) {
-        this.readyStateChange( this.HEADERS_RECEIVED );
+        this.__DexterStateChange( this.HEADERS_RECEIVED );
       }
     },
     /***
@@ -370,29 +369,30 @@
     },
     /***
      * __DexterSetResponseBody builds the response text.
-     * TODO: tests
      ***/
     __DexterSetResponseBody   : function( body ) {
       var chunkSize = this.chunkSize || 10,
           index = 0,
           type;
 
-      this.responseText = "";
+      this.responseText = '';
 
-      while ( index <= body.length ) {
-        if ( this.async ) {
-          this.readyStateChange( this.LOADING );
+      if ( this.async ) {
+        while ( index <= body.length ) {
+          this.__DexterStateChange( this.LOADING );
+          this.responseText += body.substring( index, ( index += chunkSize ) );
         }
-        this.responseText += body.substring( index, ( index += chunkSize ) );
-      } 
+      } else {
+        this.responseText = body;
+      }
 
       type = this.getResponseHeader( 'Content-Type' ) || '';
 
-      if ( this.responseText && ( /(text\/xml)|(application\/xml)|(\+xml)/.test( type ) ) ) {
+      if ( body && ( /(text\/xml)|(application\/xml)|(\+xml)/.test( type ) ) ) {
         try {
-          this.responseXML = parseXML( this.responseText );
-        } catch ( e ) {
-          // Unable to parse XML - no biggie
+          this.responseXML = parseXML( body );
+        } catch ( e ) { 
+          // Unable to parse XML 
         }
       }
     },
@@ -403,7 +403,6 @@
      *   headers : responseHeaders (Default: {})
      *   status : Number status code (Default: 200)
      * }
-     * TODO: tests
      ***/
     __DexterRespond         : function( params ) {
       var error = false,
@@ -411,19 +410,20 @@
           headers = params.headers || {},
           DONE = this.DONE;
 
-      this.__DexterSetResponseHeaders( headers );
-      this.status = params.status || 200;
-      this.statusText = statusCodes[ this.status ];
-
+      // this should be verified to prevent recalling method
       if ( this.readyState === DONE ) {
         throw new Error( 'Request already done' );
       }
+
+      this.__DexterSetResponseHeaders( headers );
+      this.status = params.status || 200;
+      this.statusText = statusCodes[ this.status ];
  
       this.__DexterSetResponseBody( body );
 
       // triggers the readystatechange if is an async request
       if ( this.async ) {
-        this.readyStateChange( DONE );
+        this.__DexterStateChange( DONE );
       } else {
         // not being async, just set readyState value
         this.readyState = DONE;
@@ -447,6 +447,13 @@
         FakeRequest,
         FakeXMLHttpRequest,
         FakeActiveXObject;
+
+    /***
+     * requests will contain all requests made on the fakeXHR object´s lifecycle
+     * doing so, they can be monitored via Dexter.fakeXHR´s instance
+     ***/
+    this.requests = [];
+    this.doneRequests = [];
 
     /***
      * this is the fake request function, and this will be applied to 
@@ -499,16 +506,21 @@
    * its returned object. Not on the XHR itself.
    ***/
   CreateFakeXHR.prototype = {
-    // TODO: tests
+    // TODO: test
+    /***
+     * interface to export xhr.__DexterRespond and set this.doneRequests
+     ***/
     respond : function( params, index ) {
       var xhr;
+
       if ( index ) {
         // if index number is set return that indexed element
-        xhr = this.requests.splice( index, 1 );
+        xhr = this.requests.splice( index, 1 )[0];
       } else {
         // else it gets the first request in line
         xhr = this.requests.shift();
       }
+
       xhr.__DexterRespond( params );
 
       // selected xhr will be seen on doneRequests collection
@@ -526,20 +538,14 @@
         if ( ajaxObjs.actX ) {
             globalObj.ActiveXObject = ajaxObjs.actX;
         }
-    },
-    /***
-     * requests will contain all requests made on the fakeXHR object´s lifecycle
-     * doing so, they can be monitored via Dexter.fakeXHR´s instance
-     ***/
-    requests : [],
-    doneRequests : []
+    }
   };
 
   /***
    * this exports the fakeXHR method to Dexter.
    ***/
   Dexter.fakeXHR = function fakeXHR() {
-    return new CreateFakeXHR();
+    return new CreateFakeXHR();   
   };
 
 }( this, Dexter ));

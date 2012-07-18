@@ -1,4 +1,4 @@
-/*! Dexter JS - v0.1.0 - 2012-07-12
+/*! Dexter JS - v0.1.0 - 2012-07-18
 * https://github.com/leobalter/DexterJS
 * Copyright (c) 2012 Leonardo Balter; Licensed MIT, GPL */
 
