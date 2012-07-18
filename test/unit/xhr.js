@@ -308,6 +308,9 @@
     raises( function() {
       xhr.__DexterRespond( params );
     }, 'xhr.__DexterRespond can only be called once per xhr object' );
+
+    spyResponseBody.restore();
+    spyResponseHeaders.restore();
   });
 
   test( '__DexterRespond alternatives', 7, function() {

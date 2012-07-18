@@ -98,6 +98,7 @@
     strictEqual( myFake.doneRequests[0], xhr, 'doneRequests receives xhr object' );
 
     myFake.restore();
+    stub.restore();
   });
 
   test( 'fakeXHR.respond with index', 3, function() {
@@ -123,6 +124,7 @@
     strictEqual( myFake.doneRequests[0], xhr2, 'doneRequests receives xhr object' );
 
     myFake.restore();
+    stub.restore();
   });
 
 }( this ) );
