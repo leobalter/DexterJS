@@ -60,7 +60,7 @@
     deepEqual( stub.isActive, false, 'stub.isActive === false after restoring' );
   });
 
-  test( 'callback()', 3, function() {
+  test( 'callback()', 4, function() {
     this.stub.callback = function( a, b, c ) {
       ok( true, '.callback is set' );
       deepEqual( [ a, b, c ], [ 1, 2, 3 ], 'callback arguments working' );
@@ -72,8 +72,9 @@
 
     this.stub = Dexter.stub( foo, 'bar', function() {
       ok( true, 'callback can be set at stub creation' );
+      return 17;
     });
 
-    foo.bar();
+		strictEqual( foo.bar(), 17, 'stub returned value set in callback' );
   });
 }( this ) );

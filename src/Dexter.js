@@ -53,7 +53,7 @@
       actions[ action ].call( this, that, args );
       
       if ( typeof( that.callback ) === 'function' ) {
-        that.callback.apply( this, args );  
+        return that.callback.apply( this, args );  
       }
     };
   }
