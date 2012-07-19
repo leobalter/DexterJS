@@ -96,4 +96,20 @@
 
     strictEqual( foo.bar(), 'foo!', 'spy preserves returned value' );
   });
+
+  test( 'callback() order', 1, function() {
+    var foo = '';
+
+    Dexter.__bar__ = function() {
+      foo = 'a';
+    }
+
+    Dexter.spy( Dexter, '__bar__', function() {
+      foo += 'b';
+    });
+
+    Dexter.__bar__();
+
+    strictEqual( foo, 'ab', 'callback called after spied function' );
+  });
 }( this ) );

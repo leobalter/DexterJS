@@ -22,12 +22,14 @@
 
   actions = {
     'spy'  : function( that, args ) {
+               // call order issues
+               var returned = that._oldCall.apply( this, args );
+
                if ( typeof( that.callback ) === 'function' ) {
-                 that.callback.apply( this, args );  
+                 that.callback.apply( this, args );
                }
                // calls the original method
-               return that._oldCall.apply( this, args );
-               
+               return returned;
              },
     'stub' : function( that, args ) { 
                if ( typeof( that.callback ) === 'function' ) {
