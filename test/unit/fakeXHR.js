@@ -127,4 +127,20 @@
     stub.restore();
   });
 
+  test( 'fakeXHR.spy and sync ajax Calls', 2, function() {
+    var myFake = Dexter.fakeXHR(),
+        spyAjax = myFake.spy( function() {
+          ok( true, 'fakeXHR.spy called' );
+          myFake.respond({
+            body : 'bar'
+          });
+        }),
+        xhr = getXHR();
+
+    xhr.open( 'GET', '/', false );
+    xhr.send();
+
+    strictEqual( xhr.responseText, 'bar', 'fakeXHR.respond inside spy worked with a sync XHR' );
+  });
+
 }( this ) );
