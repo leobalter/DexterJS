@@ -102,7 +102,7 @@
 
     Dexter.__bar__ = function() {
       foo = 'a';
-    }
+    };
 
     Dexter.spy( Dexter, '__bar__', function() {
       foo += 'b';

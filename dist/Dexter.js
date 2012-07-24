@@ -1,4 +1,4 @@
-/*! Dexter JS - v0.1.0 - 2012-07-18
+/*! Dexter JS - v0.2.1 - 2012-07-24
 * https://github.com/leobalter/DexterJS
 * Copyright (c) 2012 Leonardo Balter; Licensed MIT, GPL */
 
@@ -18,12 +18,14 @@
 
   actions = {
     'spy'  : function( that, args ) {
+               // call order issues
+               var returned = that._oldCall.apply( this, args );
+
                if ( typeof( that.callback ) === 'function' ) {
-                 that.callback.apply( this, args );  
+                 that.callback.apply( this, args );
                }
                // calls the original method
-               return that._oldCall.apply( this, args );
-               
+               return returned;
              },
     'stub' : function( that, args ) { 
                if ( typeof( that.callback ) === 'function' ) {
@@ -198,7 +200,7 @@
    ***/
   function verifyState( state, sendFlag ) {
     if ( state !== 1 || sendFlag ) {
-        throw new Error( 'INVALID_STATE_ERR' );
+      throw new Error( 'INVALID_STATE_ERR' );
     }
   }
 
@@ -338,19 +340,30 @@
      * fake .send 
      ***/
     send                    : function( data ) {
+      var reqHeaders;
       // readyState verification (xhr should be already opened)
       verifyState( this.readyState, this.sendFlag );
 
+      if ( !/^(get|head)$/i.test( this.method ) ) {
+        if (this.requestHeaders[ 'Content-Type' ]) {
+          reqHeaders = this.requestHeaders[ 'Content-Type' ].split( ';' );
+          this.requestHeaders[ 'Content-Type' ] = reqHeaders[ 0 ] + ';charset=utf-8';
+        } else {
+          this.requestHeaders[ 'Content-Type' ] = "text/plain;charset=utf-8";
+        }
+        this.requestBody = data;
+      }
+
       // setting properties
       this.errorFlag = false;
-      this.sendFlag = this.async;
+      this.sendFlag = true; // this.async;
 
       // trigger readystatechange with Opened status
       this.__DexterStateChange( this.OPENED );
 
       // hummm if think I won´t need this, omg, where´s the specification
       if ( typeof( this.onSend ) === 'function' ) {
-          this.onSend( this );
+        this.onSend( this );
       }
     },
     /***
@@ -581,7 +594,6 @@
    * its returned object. Not on the XHR itself.
    ***/
   CreateFakeXHR.prototype = {
-    // TODO: test
     /***
      * interface to export xhr.__DexterRespond and set this.doneRequests
      ***/
@@ -603,10 +615,22 @@
       this.doneRequests.push( xhr );
     },
     /***
+     * uses a Dexter.spy on xhr send requests
+     ***/
+    spy : function( callback ) {
+      var spy = Dexter.spy( fakeXHRObj, 'send', callback );
+      // this.__spy will be used on .restore();
+      this.__spy = spy;
+      return spy;
+    },
+    /***
      * restore the XHR objects to their original states, defaking them
      * this won´t affect already created fake ajax requests.
      ***/
     restore : function() {
+        if ( this.__spy ) {
+          this.__spy.restore();
+        }
         if ( ajaxObjs.xhr ) {
             globalObj.XMLHttpRequest = ajaxObjs.xhr;
         }

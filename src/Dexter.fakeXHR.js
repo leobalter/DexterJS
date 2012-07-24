@@ -263,14 +263,14 @@
      * fake .send 
      ***/
     send                    : function( data ) {
-			var reqHeaders;
+      var reqHeaders;
       // readyState verification (xhr should be already opened)
       verifyState( this.readyState, this.sendFlag );
 
-			if ( !/^(get|head)$/i.test( this.method ) ) {
-      	if (this.requestHeaders[ 'Content-Type' ]) {
+      if ( !/^(get|head)$/i.test( this.method ) ) {
+        if (this.requestHeaders[ 'Content-Type' ]) {
           reqHeaders = this.requestHeaders[ 'Content-Type' ].split( ';' );
-          this.requestHeaders[ 'Content-Type' ] = value[ 0 ] + ';charset=utf-8';
+          this.requestHeaders[ 'Content-Type' ] = reqHeaders[ 0 ] + ';charset=utf-8';
         } else {
           this.requestHeaders[ 'Content-Type' ] = "text/plain;charset=utf-8";
         }
@@ -541,19 +541,19 @@
      * uses a Dexter.spy on xhr send requests
      ***/
     spy : function( callback ) {
-			var spy = Dexter.spy( fakeXHRObj, 'send', callback );
-			// this.__spy will be used on .restore();
-			this.__spy = spy;
-			return spy;
+      var spy = Dexter.spy( fakeXHRObj, 'send', callback );
+      // this.__spy will be used on .restore();
+      this.__spy = spy;
+      return spy;
     },
     /***
      * restore the XHR objects to their original states, defaking them
      * this won´t affect already created fake ajax requests.
      ***/
     restore : function() {
-				if ( this.__spy ) {
-					this.__spy.restore();
-				}
+        if ( this.__spy ) {
+          this.__spy.restore();
+        }
         if ( ajaxObjs.xhr ) {
             globalObj.XMLHttpRequest = ajaxObjs.xhr;
         }
