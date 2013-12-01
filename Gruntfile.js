@@ -37,7 +37,7 @@ module.exports = function( grunt ) {
             options : {
                 '--web-security': 'no',
                 coverage: {
-                    src: [ 'dist/**/*.js' ],
+                    src: [ 'src/**/*.js' ],
                     instrumentedFiles: 'test/instrumented',
                     htmlReport: 'coverage',
                     coberturaReport: 'coverage',
