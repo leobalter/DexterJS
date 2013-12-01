@@ -29,7 +29,7 @@
   "dependencies": {},
   "keywords": [],
   "scripts": {
-    "test": "grunt qunit"
+    "test": "grunt -v jshint qunit"
   },
   "devDependencies": {
     "grunt": "~0.4.2",
