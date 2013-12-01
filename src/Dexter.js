@@ -1,13 +1,12 @@
 /*
  * Dexter
- * https://github.com/leobalter/Dexter
+ * https://github.com/leobalter/DexterJS
  *
  * Copyright (c) 2012 Leonardo Balter
  * Licensed under the MIT, GPL licenses.
  */
-
 (function(globalObj) {
-  var restore, callback, actions;
+  var restore, actions;
 
   restore = function() {
     this._seenObj[ this._seenMethod ] = this._oldCall;

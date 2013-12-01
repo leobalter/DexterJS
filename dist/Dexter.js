@@ -1,9 +1,8 @@
-/*! Dexter JS - v0.2.1 - 2012-07-24
-* https://github.com/leobalter/DexterJS
-* Copyright (c) 2012 Leonardo Balter; Licensed MIT, GPL */
-
+/*! DexterJS - v0.3.0 - 2013-12-01
+ * https://github.com/leobalter/DexterJS
+ * Copyright (c) 2013 Leonardo Balter; Licensed MIT, GPL */
 (function(globalObj) {
-  var restore, callback, actions;
+  var restore, actions;
 
   restore = function() {
     this._seenObj[ this._seenMethod ] = this._oldCall;
@@ -493,8 +492,7 @@
      * }
      ***/
     __DexterRespond         : function( params ) {
-      var error = false,
-          body = params.body || '',
+      var body = params.body || '',
           headers = params.headers || {},
           DONE = this.DONE;
 
