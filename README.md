@@ -2,6 +2,8 @@
 
 Dexter is a simple Test Helper, framework independent.
 
+[![Build Status](https://travis-ci.org/leobalter/DexterJS.png?branch=master)](https://travis-ci.org/leobalter/DexterJS)
+
 ## Getting Started
 Download the [production version][min] or the [development version][max].
 
