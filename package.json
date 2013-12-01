@@ -1,5 +1,5 @@
 {
-  "name": "Dexter",
+  "name": "dexterjs",
   "title": "DexterJS",
   "description": "Dexter is a simple Test Helper to mock and spy methods and to fake the Ajax interface. It's framework independent, running with QUnit, Jasmine, Mocha, etc.",
   "version": "0.3.1",
