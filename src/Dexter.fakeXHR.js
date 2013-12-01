@@ -1,4 +1,4 @@
-/*globals ActiveXObject:true,Dexter:true,document:true*/
+/*globals Dexter:true*/
 (function( globalObj, Dexter, undefined ) {
   /* var declarations */
   var ajaxObjs = {},
@@ -416,8 +416,7 @@
      * }
      ***/
     __DexterRespond         : function( params ) {
-      var error = false,
-          body = params.body || '',
+      var body = params.body || '',
           headers = params.headers || {},
           DONE = this.DONE;
 

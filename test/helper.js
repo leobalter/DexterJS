@@ -1,5 +1,3 @@
-/*globals foo:true, getXHR:true, ActiveXObject:true */
-
 window.foo = {};
 
 function getXHR() {

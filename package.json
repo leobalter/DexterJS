@@ -1,13 +1,13 @@
 {
   "name": "Dexter",
-  "title": "Dexter JS",
-  "description": "Dexter is a simple Test Helper, framework independent.",
-  "version": "0.2.1",
+  "title": "DexterJS",
+  "description": "Dexter is a simple Test Helper to mock and spy methods and to fake the Ajax interface. It's framework independent, running with QUnit, Jasmine, Mocha, etc.",
+  "version": "0.3.0",
   "homepage": "https://github.com/leobalter/DexterJS",
   "author": {
     "name": "Leonardo Balter",
     "email": "leonardo.balter@gmail.com",
-    "url": "http://leobalter.net"
+    "url": "https://github.com/leobalter"
   },
   "repository": {
     "type": "git",
@@ -32,6 +32,11 @@
     "test": "grunt qunit"
   },
   "devDependencies": {
-    "grunt": "~0.3.11"
+    "grunt": "~0.4.2",
+    "grunt-contrib-jshint": "~0.7.2",
+    "grunt-qunit-istanbul": "~0.3.0",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-uglify": "~0.2.7",
+    "grunt-contrib-watch": "~0.5.3"
   }
 }
