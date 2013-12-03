@@ -1,5 +1,5 @@
 {
-  "name": "dexterjs",
+  "name": "dexter",
   "title": "DexterJS",
   "description": "Dexter is a simple Test Helper to mock and spy methods and to fake the Ajax interface. It's framework independent, running with QUnit, Jasmine, Mocha, etc.",
   "version": "0.3.1",
@@ -29,7 +29,7 @@
   "dependencies": {},
   "keywords": [],
   "scripts": {
-    "test": "grunt -v jshint qunit"
+    "test": "grunt -v jshint qunit karma:continuous"
   },
   "devDependencies": {
     "grunt": "~0.4.2",
@@ -37,6 +37,10 @@
     "grunt-qunit-istanbul": "~0.3.0",
     "grunt-contrib-concat": "~0.3.0",
     "grunt-contrib-uglify": "~0.2.7",
-    "grunt-contrib-watch": "~0.5.3"
+    "grunt-contrib-watch": "~0.5.3",
+    "karma": "~0.10.7",
+    "karma-qunit": "~0.1.1",
+    "karma-phantomjs-launcher": "~0.1.1",
+    "grunt-karma": "~0.6.2"
   }
 }
