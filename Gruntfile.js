@@ -60,7 +60,7 @@ module.exports = function( grunt ) {
                 singleRun: true
             },
             continuous: {
-                browsers: [ 'PhantomJS' ]
+                browsers: [ 'Firefox', 'PhantomJS' ]
             },
             dev: {
                 browsers: [ 'Chrome', 'Firefox', 'PhantomJS' ],
