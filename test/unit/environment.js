@@ -1,5 +1,4 @@
 (function( window ) {
-
   /*
     ======== A Handy Little QUnit Reference ========
     http://docs.jquery.com/QUnit

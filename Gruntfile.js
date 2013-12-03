@@ -54,8 +54,24 @@ module.exports = function( grunt ) {
                 src: [ 'Gruntfile.js', 'src/**/*.js' ]
             }
         },
+        karma: {
+            options: {
+                configFile: 'karma.js',
+                singleRun: true
+            },
+            continuous: {
+                browsers: [ 'PhantomJS' ]
+            },
+            dev: {
+                browsers: [ 'Chrome', 'Firefox', 'PhantomJS' ],
+                background: true
+            }
+        },
         watch: {
-            files: '<config:jshint.all.src>',
+            files: [
+                'src/**/*.js',
+                'test/**/*.js'
+            ],
             tasks: 'lint qunit concat uglify'
         }
     });
@@ -65,8 +81,9 @@ module.exports = function( grunt ) {
     grunt.loadNpmTasks( 'grunt-contrib-concat' );
     grunt.loadNpmTasks( 'grunt-contrib-uglify' );
     grunt.loadNpmTasks( 'grunt-contrib-watch' );
+    grunt.loadNpmTasks( 'grunt-karma' );
     
     // Default task.
-    grunt.registerTask( 'default', 'jshint qunit concat uglify'.split( ' ' ) );
+    grunt.registerTask( 'default', 'jshint qunit karma:dev concat uglify'.split( ' ' ) );
 
 };
