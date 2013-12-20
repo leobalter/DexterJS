@@ -19,7 +19,7 @@ module.exports = function(config) {
         'test/helper.js',
         'test/unit/environment.js',
         'test/unit/spy.js',
-        'test/unit/stub.js',
+        'test/unit/fake.js',
         'test/unit/xhr.js',
         'test/unit/fakeXHR.js'
     ],

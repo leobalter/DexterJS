@@ -30,7 +30,7 @@
                     // calls the original method
                     return returned;
                 },
-        'stub' : function( that, args ) { 
+        'fake' : function( that, args ) { 
                      if ( typeof( that.callback ) === 'function' ) {
                          return that.callback.apply( this, args );  
                      }  
@@ -73,8 +73,8 @@
         spy  : function( obj, method, callback ) {
             return new DexterObj( 'spy', obj, method, callback );
         },
-        stub : function( obj, method, callback ) {
-            return new DexterObj( 'stub', obj, method, callback );
+        fake : function( obj, method, callback ) {
+            return new DexterObj( 'fake', obj, method, callback );
         }
     };
 }( this ));

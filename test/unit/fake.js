@@ -18,58 +18,58 @@
             raises(block, [expected], [message])
     */
 
-    module( 'Dexter Stub', {
+    module( 'Dexter fake', {
         setup : function() {
             foo.bar = function() {
-                ok( false, 'stub shoud not call original stubbed method' );
+                ok( false, 'fake shoud not call original method' );
             };
-            this.stub = Dexter.stub( foo, 'bar' );
+            this.fake = Dexter.fake( foo, 'bar' );
         }
     });
 
     test( 'returned object', 2, function() {
-        equal( typeof( this.stub ), 'object', 'Dexter.stub returns and object' );
-        ok( this.stub.isActive, 'stub.isActive === true' );
+        equal( typeof( this.fake ), 'object', 'Dexter.fake returns and object' );
+        ok( this.fake.isActive, 'fake.isActive === true' );
     });
 
     test( 'call count', 11, function() {
         var i;
         for ( i = 0 ; i < 11 ; ++i ) {
-            deepEqual( this.stub.called, i, 'stub.called === ' + i );
+            deepEqual( this.fake.called, i, 'fake.called === ' + i );
             foo.bar();
         }
     });
 
     test( 'restore()', function() {
         foo.otherBar = function() {
-            ok( true, 'stub restore objects' );
+            ok( true, 'fake restore objects' );
         };
 
-        var stub = Dexter.stub( foo, 'otherBar' );
+        var fake = Dexter.fake( foo, 'otherBar' );
 
-        stub.restore();
+        fake.restore();
 
         foo.otherBar();
 
-        deepEqual( stub.called, 0, 'restored stub should not be affected by further calls' );
-        deepEqual( stub.isActive, false, 'stub.isActive === false after restoring' );
+        deepEqual( fake.called, 0, 'restored fake should not be affected by further calls' );
+        deepEqual( fake.isActive, false, 'fake.isActive === false after restoring' );
     });
 
     test( 'callback()', 4, function() {
-        this.stub.callback = function( a, b, c ) {
+        this.fake.callback = function( a, b, c ) {
             ok( true, '.callback is set' );
             deepEqual( [ a, b, c ], [ 1, 2, 3 ], 'callback arguments working' );
         };
 
         foo.bar( 1, 2, 3 );
 
-        this.stub.restore();
+        this.fake.restore();
 
-        this.stub = Dexter.stub( foo, 'bar', function() {
-            ok( true, 'callback can be set at stub creation' );
+        this.fake = Dexter.fake( foo, 'bar', function() {
+            ok( true, 'callback can be set at fake creation' );
             return 17;
         });
 
-        strictEqual( foo.bar(), 17, 'stub returned value set in callback' );
+        strictEqual( foo.bar(), 17, 'fake returned value set in callback' );
     });
 }( this ) );
