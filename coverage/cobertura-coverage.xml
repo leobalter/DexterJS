@@ -1,11 +1,11 @@
 <?xml version="1.0" ?>
 <!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
-<coverage lines-valid="210"  lines-covered="187"  line-rate="0.8905"  branches-valid="104"  branches-covered="83"  branch-rate="0.7981"  timestamp="1387565178345" complexity="0" version="0.1">
+<coverage lines-valid="220"  lines-covered="197"  line-rate="0.8955"  branches-valid="104"  branches-covered="83"  branch-rate="0.7981"  timestamp="1387573227884" complexity="0" version="0.1">
 <sources>
 	<source>/Users/leobalter/dev/DexterJS</source>
 </sources>
 <packages>
-	<package name="src"  line-rate="0.8905"  branch-rate="0.7981" >
+	<package name="src"  line-rate="0.8955"  branch-rate="0.7981" >
 	<classes>
 		<class name="Dexter.fakeXHR.js"  filename="src/Dexter.fakeXHR.js"  line-rate="0.8686"  branch-rate="0.7717" >
 		<methods>
@@ -265,67 +265,80 @@
 			<method name="(anonymous_1)"  hits="1"  signature="()V" >
 				<lines><line number="8"  hits="1" /></lines>
 			</method>
-			<method name="(anonymous_2)"  hits="8"  signature="()V" >
-				<lines><line number="11"  hits="8" /></lines>
+			<method name="(anonymous_2)"  hits="39"  signature="()V" >
+				<lines><line number="17"  hits="39" /></lines>
 			</method>
-			<method name="setDexterObjs"  hits="20"  signature="()V" >
-				<lines><line number="16"  hits="20" /></lines>
+			<method name="setDexterObjs"  hits="30"  signature="()V" >
+				<lines><line number="22"  hits="30" /></lines>
 			</method>
 			<method name="(anonymous_4)"  hits="18"  signature="()V" >
-				<lines><line number="23"  hits="18" /></lines>
+				<lines><line number="29"  hits="18" /></lines>
 			</method>
 			<method name="(anonymous_5)"  hits="15"  signature="()V" >
-				<lines><line number="33"  hits="15" /></lines>
+				<lines><line number="39"  hits="15" /></lines>
 			</method>
-			<method name="DexterObj"  hits="23"  signature="()V" >
-				<lines><line number="40"  hits="23" /></lines>
+			<method name="DexterObj"  hits="33"  signature="()V" >
+				<lines><line number="46"  hits="33" /></lines>
 			</method>
 			<method name="(anonymous_7)"  hits="33"  signature="()V" >
-				<lines><line number="59"  hits="33" /></lines>
+				<lines><line number="65"  hits="33" /></lines>
 			</method>
-			<method name="(anonymous_8)"  hits="15"  signature="()V" >
-				<lines><line number="73"  hits="15" /></lines>
+			<method name="createDexterObj"  hits="2"  signature="()V" >
+				<lines><line number="74"  hits="2" /></lines>
 			</method>
-			<method name="(anonymous_9)"  hits="8"  signature="()V" >
-				<lines><line number="76"  hits="8" /></lines>
+			<method name="(anonymous_9)"  hits="33"  signature="()V" >
+				<lines><line number="75"  hits="33" /></lines>
+			</method>
+			<method name="restoreAll"  hits="2"  signature="()V" >
+				<lines><line number="83"  hits="2" /></lines>
 			</method>
 		</methods>
 		<lines>
 			<line number="8"  hits="1"  branch="false" />
 			<line number="9"  hits="1"  branch="false" />
-			<line number="11"  hits="1"  branch="false" />
-			<line number="12"  hits="8"  branch="false" />
-			<line number="13"  hits="8"  branch="false" />
-			<line number="16"  hits="1"  branch="false" />
-			<line number="17"  hits="20"  branch="false" />
-			<line number="18"  hits="20"  branch="false" />
-			<line number="19"  hits="20"  branch="false" />
+			<line number="15"  hits="1"  branch="false" />
+			<line number="17"  hits="1"  branch="false" />
+			<line number="18"  hits="39"  branch="false" />
+			<line number="19"  hits="39"  branch="false" />
 			<line number="22"  hits="1"  branch="false" />
-			<line number="25"  hits="18"  branch="false" />
-			<line number="27"  hits="18"  branch="true"  condition-coverage="100% (2/2)" />
-			<line number="28"  hits="6"  branch="false" />
+			<line number="23"  hits="30"  branch="false" />
+			<line number="24"  hits="30"  branch="false" />
+			<line number="25"  hits="30"  branch="false" />
+			<line number="28"  hits="1"  branch="false" />
 			<line number="31"  hits="18"  branch="false" />
-			<line number="34"  hits="15"  branch="true"  condition-coverage="100% (2/2)" />
-			<line number="35"  hits="4"  branch="false" />
-			<line number="40"  hits="1"  branch="false" />
-			<line number="41"  hits="23"  branch="false" />
-			<line number="42"  hits="23"  branch="false" />
-			<line number="43"  hits="23"  branch="false" />
-			<line number="45"  hits="23"  branch="true"  condition-coverage="100% (2/2)" />
-			<line number="46"  hits="2"  branch="false" />
-			<line number="49"  hits="21"  branch="true"  condition-coverage="100% (4/4)" />
-			<line number="50"  hits="1"  branch="false" />
-			<line number="53"  hits="20"  branch="true"  condition-coverage="100% (2/2)" />
-			<line number="54"  hits="4"  branch="false" />
-			<line number="57"  hits="20"  branch="false" />
-			<line number="59"  hits="20"  branch="false" />
-			<line number="60"  hits="33"  branch="false" />
-			<line number="62"  hits="33"  branch="false" />
-			<line number="64"  hits="33"  branch="false" />
-			<line number="68"  hits="1"  branch="false" />
-			<line number="72"  hits="1"  branch="false" />
-			<line number="74"  hits="15"  branch="false" />
-			<line number="77"  hits="8"  branch="false" />
+			<line number="33"  hits="18"  branch="true"  condition-coverage="100% (2/2)" />
+			<line number="34"  hits="6"  branch="false" />
+			<line number="37"  hits="18"  branch="false" />
+			<line number="40"  hits="15"  branch="true"  condition-coverage="100% (2/2)" />
+			<line number="41"  hits="4"  branch="false" />
+			<line number="46"  hits="1"  branch="false" />
+			<line number="47"  hits="33"  branch="false" />
+			<line number="48"  hits="33"  branch="false" />
+			<line number="49"  hits="33"  branch="false" />
+			<line number="51"  hits="33"  branch="true"  condition-coverage="100% (2/2)" />
+			<line number="52"  hits="2"  branch="false" />
+			<line number="55"  hits="31"  branch="true"  condition-coverage="100% (4/4)" />
+			<line number="56"  hits="1"  branch="false" />
+			<line number="59"  hits="30"  branch="true"  condition-coverage="100% (2/2)" />
+			<line number="60"  hits="5"  branch="false" />
+			<line number="63"  hits="30"  branch="false" />
+			<line number="65"  hits="30"  branch="false" />
+			<line number="66"  hits="33"  branch="false" />
+			<line number="68"  hits="33"  branch="false" />
+			<line number="70"  hits="33"  branch="false" />
+			<line number="74"  hits="1"  branch="false" />
+			<line number="75"  hits="2"  branch="false" />
+			<line number="76"  hits="33"  branch="false" />
+			<line number="77"  hits="30"  branch="false" />
+			<line number="79"  hits="30"  branch="false" />
+			<line number="83"  hits="1"  branch="false" />
+			<line number="84"  hits="2"  branch="false" />
+			<line number="85"  hits="22"  branch="false" />
+			<line number="88"  hits="2"  branch="false" />
+			<line number="91"  hits="1"  branch="false" />
+			<line number="95"  hits="1"  branch="false" />
+			<line number="96"  hits="1"  branch="false" />
+			<line number="97"  hits="1"  branch="false" />
 		</lines>
 		</class>
 	</classes>

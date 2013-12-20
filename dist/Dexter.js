@@ -2,7 +2,13 @@
  * https://github.com/leobalter/DexterJS
  * Copyright (c) 2013 Leonardo Balter; Licensed MIT, GPL */
 (function( globalObj ) {
-    var restore, actions;
+    var Dexter = {
+            stored : []
+        },
+        restore, actions;
+
+    // referencing to the global scope
+    globalObj.Dexter = Dexter;
 
     restore = function() {
         this._seenObj[ this._seenMethod ] = this._oldCall;
@@ -61,18 +67,31 @@
         };
     }
 
+    function createDexterObj( name ) {
+        return function ( obj, method, callback ) {
+            var newObj = new DexterObj( name, obj, method, callback );
+            Dexter.stored.push( newObj );
+
+            return newObj;
+        };
+    }
+
+    function restoreAll() {
+        while ( Dexter.stored.length ) {
+            Dexter.stored.pop().restore();
+        }
+
+        return Dexter.stored.length === 0;
+    }
+
     DexterObj.prototype = {
         restore  : restore
     };
 
-    globalObj.Dexter = {
-        spy  : function( obj, method, callback ) {
-            return new DexterObj( 'spy', obj, method, callback );
-        },
-        fake : function( obj, method, callback ) {
-            return new DexterObj( 'fake', obj, method, callback );
-        }
-    };
+    Dexter.spy = createDexterObj( 'spy' );
+    Dexter.fake = createDexterObj( 'fake' );
+    Dexter.restore = restoreAll;
+
 }( this ));
 
 (function( globalObj, Dexter, undefined ) {

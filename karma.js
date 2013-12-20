@@ -21,6 +21,7 @@ module.exports = function(config) {
         'test/unit/spy.js',
         'test/unit/fake.js',
         'test/unit/xhr.js',
+        'test/unit/restore.js',
         'test/unit/fakeXHR.js'
     ],
 
