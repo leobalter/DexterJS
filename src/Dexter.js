@@ -5,7 +5,7 @@
  * Copyright (c) 2012 Leonardo Balter
  * Licensed under the MIT, GPL licenses.
  */
-(function(globalObj) {
+(function( globalObj ) {
     var restore, actions;
 
     restore = function() {
@@ -20,21 +20,21 @@
     }
 
     actions = {
-        'spy'  : function( that, args ) {
-                             // call order issues
-                             var returned = that._oldCall.apply( this, args );
+        'spy' : function( that, args ) {
+                    // call order issues
+                    var returned = that._oldCall.apply( this, args );
 
-                             if ( typeof( that.callback ) === 'function' ) {
-                                 that.callback.apply( this, args );
-                             }
-                             // calls the original method
-                             return returned;
-                         },
+                    if ( typeof( that.callback ) === 'function' ) {
+                        that.callback.apply( this, args );
+                    }
+                    // calls the original method
+                    return returned;
+                },
         'stub' : function( that, args ) { 
-                             if ( typeof( that.callback ) === 'function' ) {
-                                 return that.callback.apply( this, args );  
-                             }  
-                         }
+                     if ( typeof( that.callback ) === 'function' ) {
+                         return that.callback.apply( this, args );  
+                     }  
+                 }
     };
 
     function DexterObj( action, obj, method, callback ) {
@@ -77,4 +77,4 @@
             return new DexterObj( 'stub', obj, method, callback );
         }
     };
-}(this));
+}( this ));
