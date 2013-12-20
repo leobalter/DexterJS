@@ -1,142 +1,142 @@
 (function( window ) {
 
-  /*
-    ======== A Handy Little QUnit Reference ========
-    http://docs.jquery.com/QUnit
+    /*
+        ======== A Handy Little QUnit Reference ========
+        http://docs.jquery.com/QUnit
 
-    Test methods:
-      expect(numAssertions)
-      stop(increment)
-      start(decrement)
-    Test assertions:
-      ok(value, [message])
-      equal(actual, expected, [message])
-      notEqual(actual, expected, [message])
-      deepEqual(actual, expected, [message])
-      notDeepEqual(actual, expected, [message])
-      strictEqual(actual, expected, [message])
-      notStrictEqual(actual, expected, [message])
-      raises(block, [expected], [message])
-  */
+        Test methods:
+            expect(numAssertions)
+            stop(increment)
+            start(decrement)
+        Test assertions:
+            ok(value, [message])
+            equal(actual, expected, [message])
+            notEqual(actual, expected, [message])
+            deepEqual(actual, expected, [message])
+            notDeepEqual(actual, expected, [message])
+            strictEqual(actual, expected, [message])
+            notStrictEqual(actual, expected, [message])
+            raises(block, [expected], [message])
+    */
 
-  module( 'fakeXHR' );
+    module( 'fakeXHR' );
 
-  test( 'XMLHttpRequest/ActiveXObject substitutions (also restoring)', function() {
-    var myFake,
-        expected = 0;
+    test( 'XMLHttpRequest/ActiveXObject substitutions (also restoring)', function() {
+        var myFake,
+                expected = 0;
 
-    // Can´t run some tests regarding browser limitations
-    if ( window.XMLHttpRequest ) {
-      expected += 3;
+        // Can´t run some tests regarding browser limitations
+        if ( window.XMLHttpRequest ) {
+            expected += 3;
 
-      strictEqual( typeof( XMLHttpRequest.prototype.__DexterXHR ), 'undefined', 'untouched XMLHttpRequest' );
+            strictEqual( typeof( XMLHttpRequest.prototype.__DexterXHR ), 'undefined', 'untouched XMLHttpRequest' );
 
-      myFake = Dexter.fakeXHR();
-      ok( XMLHttpRequest.prototype.__DexterXHR, 'Dexter fakes XMLHttpRequest' );
+            myFake = Dexter.fakeXHR();
+            ok( XMLHttpRequest.prototype.__DexterXHR, 'Dexter fakes XMLHttpRequest' );
 
-      myFake.restore();
-      strictEqual( typeof( XMLHttpRequest.prototype.__DexterXHR ), 'undefined', 'original XMLHttpRequest after .restore() ' );
-    }
+            myFake.restore();
+            strictEqual( typeof( XMLHttpRequest.prototype.__DexterXHR ), 'undefined', 'original XMLHttpRequest after .restore() ' );
+        }
 
-    if ( window.ActiveXObject ) {
-      expected += 3;
+        if ( window.ActiveXObject ) {
+            expected += 3;
 
-      strictEqual( typeof( XMLHttpRequest.prototype.__DexterXHR ), 'undefined', 'untouched ActiveXObject' );
+            strictEqual( typeof( XMLHttpRequest.prototype.__DexterXHR ), 'undefined', 'untouched ActiveXObject' );
 
-      myFake = Dexter.fakeXHR();
-      ok( XMLHttpRequest.prototype.__DexterXHR, 'Dexter fakes ActiveXObject' ); 
+            myFake = Dexter.fakeXHR();
+            ok( XMLHttpRequest.prototype.__DexterXHR, 'Dexter fakes ActiveXObject' ); 
 
-      myFake.restore();
-      strictEqual( typeof( XMLHttpRequest.prototype.__DexterXHR ), 'undefined', 'original ActiveXObject after .restore() ' );
-    }
+            myFake.restore();
+            strictEqual( typeof( XMLHttpRequest.prototype.__DexterXHR ), 'undefined', 'original ActiveXObject after .restore() ' );
+        }
 
-    expect( expected );
-    
-  });
+        expect( expected );
+        
+    });
 
-  test( 'registering requests', 5, function() {
-    var myFake = Dexter.fakeXHR(),
-        xhr,
-        xhr2;
+    test( 'registering requests', 5, function() {
+        var myFake = Dexter.fakeXHR(),
+                xhr,
+                xhr2;
 
-    strictEqual( myFake.requests.length, 0, 'myFake.requests.length === 0 (before new XHR)' );
-    xhr = getXHR();
-    strictEqual( myFake.requests.length, 1, 'myFake.requests.length === 1 (after new XHR)' );
-    strictEqual( myFake.requests[0], xhr, 'myFake.requests[0] === xhr object' );
+        strictEqual( myFake.requests.length, 0, 'myFake.requests.length === 0 (before new XHR)' );
+        xhr = getXHR();
+        strictEqual( myFake.requests.length, 1, 'myFake.requests.length === 1 (after new XHR)' );
+        strictEqual( myFake.requests[0], xhr, 'myFake.requests[0] === xhr object' );
 
-    xhr2 = getXHR();
-    strictEqual( myFake.requests.length, 2, 'myFake.requests.length === 1 (after new XHR)' );
-    strictEqual( myFake.requests[1], xhr2, 'myFake.requests[0] === xhr object' );
+        xhr2 = getXHR();
+        strictEqual( myFake.requests.length, 2, 'myFake.requests.length === 1 (after new XHR)' );
+        strictEqual( myFake.requests[1], xhr2, 'myFake.requests[0] === xhr object' );
 
-    myFake.restore();
-  }); 
+        myFake.restore();
+    }); 
 
-  test( 'fakeXHR.respond without index', 4, function() {
-    var myFake = Dexter.fakeXHR(),
-        xhr = getXHR(),
-        stub = Dexter.stub( xhr, '__DexterRespond' ),
-        params = { 
-            body : 'foo' 
+    test( 'fakeXHR.respond without index', 4, function() {
+        var myFake = Dexter.fakeXHR(),
+                xhr = getXHR(),
+                stub = Dexter.stub( xhr, '__DexterRespond' ),
+                params = { 
+                        body : 'foo' 
+                };
+
+        stub.callback = function( arg1 ) {
+            strictEqual( arg1, params, '__DexterRespond called with .respond first argument' );
+            strictEqual( this, xhr, '__DexterRespond this === xhr' );
         };
 
-    stub.callback = function( arg1 ) {
-      strictEqual( arg1, params, '__DexterRespond called with .respond first argument' );
-      strictEqual( this, xhr, '__DexterRespond this === xhr' );
-    };
+        xhr.open( 'GET', '/' );
+        xhr.send();
 
-    xhr.open( 'GET', '/' );
-    xhr.send();
+        deepEqual( myFake.doneRequests, [], 'doneRequests === []' );
 
-    deepEqual( myFake.doneRequests, [], 'doneRequests === []' );
+        myFake.respond( params );
 
-    myFake.respond( params );
+        strictEqual( myFake.doneRequests[0], xhr, 'doneRequests receives xhr object' );
 
-    strictEqual( myFake.doneRequests[0], xhr, 'doneRequests receives xhr object' );
+        myFake.restore();
+        stub.restore();
+    });
 
-    myFake.restore();
-    stub.restore();
-  });
+    test( 'fakeXHR.respond with index', 3, function() {
+        var myFake = Dexter.fakeXHR(),
+                xhr = getXHR(),
+                xhr2 = getXHR(),
+                stub = Dexter.stub( xhr2, '__DexterRespond' ),
+                params = { 
+                        body : 'foo' 
+                }; 
 
-  test( 'fakeXHR.respond with index', 3, function() {
-    var myFake = Dexter.fakeXHR(),
-        xhr = getXHR(),
-        xhr2 = getXHR(),
-        stub = Dexter.stub( xhr2, '__DexterRespond' ),
-        params = { 
-            body : 'foo' 
-        }; 
+        stub.callback = function( arg1 ) {
+            strictEqual( this, xhr2, '__DexterRespond this === xhr' );
+        };
 
-    stub.callback = function( arg1 ) {
-      strictEqual( this, xhr2, '__DexterRespond this === xhr' );
-    };
+        xhr2.open( 'GET', '/' );
+        xhr2.send();
 
-    xhr2.open( 'GET', '/' );
-    xhr2.send();
+        deepEqual( myFake.doneRequests, [], 'doneRequests === []' );
 
-    deepEqual( myFake.doneRequests, [], 'doneRequests === []' );
+        myFake.respond( params, 1 );
 
-    myFake.respond( params, 1 );
+        strictEqual( myFake.doneRequests[0], xhr2, 'doneRequests receives xhr object' );
 
-    strictEqual( myFake.doneRequests[0], xhr2, 'doneRequests receives xhr object' );
+        myFake.restore();
+        stub.restore();
+    });
 
-    myFake.restore();
-    stub.restore();
-  });
+    test( 'fakeXHR.spy and sync ajax Calls', 2, function() {
+        var myFake = Dexter.fakeXHR(),
+                spyAjax = myFake.spy( function() {
+                    ok( true, 'fakeXHR.spy called' );
+                    myFake.respond({
+                        body : 'bar'
+                    });
+                }),
+                xhr = getXHR();
 
-  test( 'fakeXHR.spy and sync ajax Calls', 2, function() {
-    var myFake = Dexter.fakeXHR(),
-        spyAjax = myFake.spy( function() {
-          ok( true, 'fakeXHR.spy called' );
-          myFake.respond({
-            body : 'bar'
-          });
-        }),
-        xhr = getXHR();
+        xhr.open( 'GET', '/', false );
+        xhr.send();
 
-    xhr.open( 'GET', '/', false );
-    xhr.send();
-
-    strictEqual( xhr.responseText, 'bar', 'fakeXHR.respond inside spy worked with a sync XHR' );
-  });
+        strictEqual( xhr.responseText, 'bar', 'fakeXHR.respond inside spy worked with a sync XHR' );
+    });
 
 }( this ) );
