@@ -15,13 +15,13 @@ Download the [production version][min] or the [development version][max].
 The project documentation is located in https://github.com/leobalter/DexterJS/wiki
 
 ## License
-Copyright (c) 2012 Leonardo Balter  
+Copyright (c) 2012 Leonardo Balter
 Licensed under the MIT, GPL licenses.
 
 ## Contributing
 
 1. In lieu of a formal styleguide, take care to maintain the existing coding style and please do follow [idiomatic.js](https://github.com/rwldrn/idiomatic.js).
-2. Add unit tests for any new or changed functionality. 
+2. Add unit tests for any new or changed functionality.
 3. Lint and test your code using [grunt](https://github.com/cowboy/grunt).
 
 ### Important notes
@@ -29,7 +29,7 @@ Please don't edit files in the `dist` subdirectory as they are generated via gru
 
 While grunt can run the included unit tests via PhantomJS, this shouldn't be considered a substitute for the real thing. Please be sure to test the `test/*.html` unit test file(s) in _actual_ browsers.
 
-### Grunt the code before pushing! 
+### Grunt the code before pushing!
 _This assumes you have [node.js](http://nodejs.org/) installed already._
 
 1. To install grunt globally, please run `npm install -g grunt-cli`, it requires at least the version 0.4.2 to make it work.

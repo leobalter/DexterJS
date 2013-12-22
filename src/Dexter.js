@@ -27,20 +27,20 @@
 
     actions = {
         'spy' : function( that, args ) {
-                    // call order issues
-                    var returned = that._oldCall.apply( this, args );
+            // call order issues
+            var returned = that._oldCall.apply( this, args );
 
-                    if ( typeof( that.callback ) === 'function' ) {
-                        that.callback.apply( this, args );
-                    }
-                    // calls the original method
-                    return returned;
-                },
-        'fake' : function( that, args ) { 
-                     if ( typeof( that.callback ) === 'function' ) {
-                         return that.callback.apply( this, args );  
-                     }  
-                 }
+            if ( typeof( that.callback ) === 'function' ) {
+                that.callback.apply( this, args );
+            }
+            // calls the original method
+            return returned;
+        },
+        'fake' : function( that, args ) {
+            if ( typeof( that.callback ) === 'function' ) {
+                return that.callback.apply( this, args );
+            }
+        }
     };
 
     function DexterObj( action, obj, method, callback ) {
