@@ -1,8 +1,8 @@
 <?xml version="1.0" ?>
 <!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
-<coverage lines-valid="220"  lines-covered="197"  line-rate="0.8955"  branches-valid="104"  branches-covered="83"  branch-rate="0.7981"  timestamp="1387573227884" complexity="0" version="0.1">
+<coverage lines-valid="220"  lines-covered="197"  line-rate="0.8955"  branches-valid="104"  branches-covered="83"  branch-rate="0.7981"  timestamp="1387744590151" complexity="0" version="0.1">
 <sources>
-	<source>/Users/leobalter/dev/DexterJS</source>
+	<source>/Users/luanmuniz/Projects/DexterJS</source>
 </sources>
 <packages>
 	<package name="src"  line-rate="0.8955"  branch-rate="0.7981" >

@@ -1,4 +1,4 @@
-/*! DexterJS - v0.3.1 - 2013-12-20
+/*! DexterJS - v0.3.1 - 2013-12-22
  * https://github.com/leobalter/DexterJS
  * Copyright (c) 2013 Leonardo Balter; Licensed MIT, GPL */
 (function( globalObj ) {
@@ -23,20 +23,20 @@
 
     actions = {
         'spy' : function( that, args ) {
-                    // call order issues
-                    var returned = that._oldCall.apply( this, args );
+            // call order issues
+            var returned = that._oldCall.apply( this, args );
 
-                    if ( typeof( that.callback ) === 'function' ) {
-                        that.callback.apply( this, args );
-                    }
-                    // calls the original method
-                    return returned;
-                },
-        'fake' : function( that, args ) { 
-                     if ( typeof( that.callback ) === 'function' ) {
-                         return that.callback.apply( this, args );  
-                     }  
-                 }
+            if ( typeof( that.callback ) === 'function' ) {
+                that.callback.apply( this, args );
+            }
+            // calls the original method
+            return returned;
+        },
+        'fake' : function( that, args ) {
+            if ( typeof( that.callback ) === 'function' ) {
+                return that.callback.apply( this, args );
+            }
+        }
     };
 
     function DexterObj( action, obj, method, callback ) {
@@ -102,10 +102,10 @@
             fakeXHRObj,
             CreateFakeXHR;
 
-    /*** 
+    /***
      * checks for XHR existence
      * returns => XHR fn || false
-     ***/ 
+     ***/
     ajaxObjs.xhr = (function() {
         var xhr;
         try {
@@ -117,9 +117,9 @@
     }());
 
     /***
-     * checks for ActiveXObject XHR existence 
+     * checks for ActiveXObject XHR existence
      * returns => ActiveX XHR fn || false
-     ***/ 
+     ***/
     ajaxObjs.actX = (function() {
         var xhr;
         try {
@@ -129,50 +129,50 @@
             return false;
         }
     }());
-    
+
     // Status code and their respective texts
     statusCodes = {
-        100: "Continue",
-        101: "Switching Protocols",
-        200: "OK",
-        201: "Created",
-        202: "Accepted",
-        203: "Non-Authoritative Information",
-        204: "No Content",
-        205: "Reset Content",
-        206: "Partial Content",
-        300: "Multiple Choice",
-        301: "Moved Permanently",
-        302: "Found",
-        303: "See Other",
-        304: "Not Modified",
-        305: "Use Proxy",
-        307: "Temporary Redirect",
-        400: "Bad Request",
-        401: "Unauthorized",
-        402: "Payment Required",
-        403: "Forbidden",
-        404: "Not Found",
-        405: "Method Not Allowed",
-        406: "Not Acceptable",
-        407: "Proxy Authentication Required",
-        408: "Request Timeout",
-        409: "Conflict",
-        410: "Gone",
-        411: "Length Required",
-        412: "Precondition Failed",
-        413: "Request Entity Too Large",
-        414: "Request-URI Too Long",
-        415: "Unsupported Media Type",
-        416: "Requested Range Not Satisfiable",
-        417: "Expectation Failed",
-        422: "Unprocessable Entity",
-        500: "Internal Server Error",
-        501: "Not Implemented",
-        502: "Bad Gateway",
-        503: "Service Unavailable",
-        504: "Gateway Timeout",
-        505: "HTTP Version Not Supported"
+        100: 'Continue',
+        101: 'Switching Protocols',
+        200: 'OK',
+        201: 'Created',
+        202: 'Accepted',
+        203: 'Non-Authoritative Information',
+        204: 'No Content',
+        205: 'Reset Content',
+        206: 'Partial Content',
+        300: 'Multiple Choice',
+        301: 'Moved Permanently',
+        302: 'Found',
+        303: 'See Other',
+        304: 'Not Modified',
+        305: 'Use Proxy',
+        307: 'Temporary Redirect',
+        400: 'Bad Request',
+        401: 'Unauthorized',
+        402: 'Payment Required',
+        403: 'Forbidden',
+        404: 'Not Found',
+        405: 'Method Not Allowed',
+        406: 'Not Acceptable',
+        407: 'Proxy Authentication Required',
+        408: 'Request Timeout',
+        409: 'Conflict',
+        410: 'Gone',
+        411: 'Length Required',
+        412: 'Precondition Failed',
+        413: 'Request Entity Too Large',
+        414: 'Request-URI Too Long',
+        415: 'Unsupported Media Type',
+        416: 'Requested Range Not Satisfiable',
+        417: 'Expectation Failed',
+        422: 'Unprocessable Entity',
+        500: 'Internal Server Error',
+        501: 'Not Implemented',
+        502: 'Bad Gateway',
+        503: 'Service Unavailable',
+        504: 'Gateway Timeout',
+        505: 'HTTP Version Not Supported'
     };
 
     // Some headers should be avoided
@@ -213,7 +213,7 @@
     }
 
     /***
-     * verifyState helps verifying XHR readyState in cases when that should be 
+     * verifyState helps verifying XHR readyState in cases when that should be
      * 1 (Opened) and sendFlag can´t be true. (not yet sent request)
      ***/
     function verifyState( state, sendFlag ) {
@@ -230,12 +230,12 @@
                 parser;
 
         if ( typeof globalObj.DOMParser !== 'undefined' ) {
-                parser = new globalObj.DOMParser();
-                xmlDoc = parser.parseFromString( text, 'text/xml' );
+            parser = new globalObj.DOMParser();
+            xmlDoc = parser.parseFromString( text, 'text/xml' );
         } else {
-                xmlDoc = new ActiveXObject( 'Microsoft.XMLDOM' );
-                xmlDoc.async = 'false';
-                xmlDoc.loadXML( text );
+            xmlDoc = new ActiveXObject( 'Microsoft.XMLDOM' );
+            xmlDoc.async = 'false';
+            xmlDoc.loadXML( text );
         }
 
         return xmlDoc;
@@ -260,15 +260,15 @@
         // readyState always start by 0
         readyState              : 0,
         // other properties
-        response                : "",
-        responseText            : "",
-        responseType            : "",
+        response                : '',
+        responseText            : '',
+        responseType            : '',
         responseXML             : null,
         withCredentials         : false,
         // status code
         status                  : 0,
         // status text relative to the status code
-        statusText              : "",
+        statusText              : '',
         // timeout to be set, starts by 0
         timeout                 : 0,
         /***
@@ -291,12 +291,12 @@
             if ( this.readyState > this.UNSENT && this.sendFlag ) {
                 this.__DexterStateChange( this.DONE );
             } else {
-                this.__DexterStateChange( this.UNSENT );  
+                this.__DexterStateChange( this.UNSENT );
             }
-            
+
         },
         /***
-         * fake .getResponseHeader 
+         * fake .getResponseHeader
          ***/
         getResponseHeader      : function( key ) {
             var headerName,
@@ -320,7 +320,7 @@
                     if ( headerName.toLowerCase() === key ) {
                         // se we return its value
                         return responseHeaders[ headerName ];
-                    }  
+                    }
                 }
             }
 
@@ -355,7 +355,7 @@
             this.__DexterStateChange( this.OPENED );
         },
         /***
-         * fake .send 
+         * fake .send
          ***/
         send                    : function( data ) {
             var reqHeaders;
@@ -367,7 +367,7 @@
                     reqHeaders = this.requestHeaders[ 'Content-Type' ].split( ';' );
                     this.requestHeaders[ 'Content-Type' ] = reqHeaders[ 0 ] + ';charset=utf-8';
                 } else {
-                    this.requestHeaders[ 'Content-Type' ] = "text/plain;charset=utf-8";
+                    this.requestHeaders[ 'Content-Type' ] = 'text/plain;charset=utf-8';
                 }
                 this.requestBody = data;
             }
@@ -385,7 +385,7 @@
             }
         },
         /***
-         * fake .setRequestHeader 
+         * fake .setRequestHeader
          ***/
         setRequestHeader        : function( key, value ) {
             // readyState verification (xhr should be already opened)
@@ -400,7 +400,7 @@
 
             if ( this.requestHeaders[ key ] ) {
                 // if we already have this key set, we concatenate values
-                this.requestHeaders[ key ] += "," + value;
+                this.requestHeaders[ key ] += ',' + value;
             } else {
                 // or we just set key and value
                 this.requestHeaders[ key ] = value;
@@ -418,9 +418,9 @@
             }
 
             for ( header in this.responseHeaders ) {
-                    if ( this.responseHeaders.hasOwnProperty( header ) && !/^Set-Cookie2?$/i.test( header ) ) {
-                            headers += header + ': ' + this.responseHeaders[ header ] + '\r\n';
-                    }
+                if ( this.responseHeaders.hasOwnProperty( header ) && !/^Set-Cookie2?$/i.test( header ) ) {
+                    headers += header + ': ' + this.responseHeaders[ header ] + '\r\n';
+                }
             }
 
             return headers;
@@ -455,7 +455,7 @@
         __DexterStateChange     : function( state ) {
             var ev;
             this.readyState = state;
-            
+
             if ( typeof this.onreadystatechange === 'function' ) {
                 try {
                     // dumb event creation. "new Event" just fire errors in webkit engines
@@ -497,8 +497,8 @@
             if ( body && ( /(text\/xml)|(application\/xml)|(\+xml)/.test( type ) ) ) {
                 try {
                     this.responseXML = parseXML( body );
-                } catch ( e ) { 
-                    // Unable to parse XML 
+                } catch ( e ) {
+                    // Unable to parse XML
                 }
             }
         },
@@ -523,7 +523,7 @@
             this.__DexterSetResponseHeaders( headers );
             this.status = params.status || 200;
             this.statusText = statusCodes[ this.status ];
- 
+
             this.__DexterSetResponseBody( body );
 
             // triggers the readystatechange if is an async request
@@ -561,12 +561,12 @@
         this.doneRequests = [];
 
         /***
-         * this is the fake request function, and this will be applied to 
+         * this is the fake request function, and this will be applied to
          * XMLHttpRequest and/or ActiveXObject regarding their availability
          ***/
         FakeRequest = function( argsObj, type ) {
             var args = [].slice.call( argsObj );
-            
+
             // creating a reference of xhr object in Dexter.fakeXHR() object
             DexterXHR.requests.push( this );
 
@@ -576,9 +576,9 @@
             // we need an ActiveXObject fallback if an external
             // script is trying request any other funcionality
             if ( type === 'ActiveXObject' && args[0] !== 'Microsoft.XMLHTTP' ) {
-                    return ajaxObjs( args );
+                return ajaxObjs( args );
             } else {
-                    return this;
+                return this;
             }
         };
 
@@ -598,11 +598,11 @@
         FakeActiveXObject.prototype = fakeXHRObj;
 
         if ( ajaxObjs.xhr ) {
-                globalObj.XMLHttpRequest = FakeXMLHttpRequest;
+            globalObj.XMLHttpRequest = FakeXMLHttpRequest;
         }
 
         if ( ajaxObjs.actX ) {
-                globalObj.ActiveXObject = FakeActiveXObject;
+            globalObj.ActiveXObject = FakeActiveXObject;
         }
     };
 
@@ -645,16 +645,16 @@
          * this won´t affect already created fake ajax requests.
          ***/
         restore : function() {
-                if ( this.__spy ) {
-                    this.__spy.restore();
-                }
-                if ( ajaxObjs.xhr ) {
-                        globalObj.XMLHttpRequest = ajaxObjs.xhr;
-                }
+            if ( this.__spy ) {
+                this.__spy.restore();
+            }
+            if ( ajaxObjs.xhr ) {
+                globalObj.XMLHttpRequest = ajaxObjs.xhr;
+            }
 
-                if ( ajaxObjs.actX ) {
-                        globalObj.ActiveXObject = ajaxObjs.actX;
-                }
+            if ( ajaxObjs.actX ) {
+                globalObj.ActiveXObject = ajaxObjs.actX;
+            }
         }
     };
 
@@ -662,7 +662,7 @@
      * this exports the fakeXHR method to Dexter.
      ***/
     Dexter.fakeXHR = function fakeXHR() {
-        return new CreateFakeXHR();   
+        return new CreateFakeXHR();
     };
 
 }( this, Dexter ));
