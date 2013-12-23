@@ -57,19 +57,6 @@ module.exports = function( grunt ) {
                 src: [ 'Gruntfile.js', 'src/**/*.js' ]
             }
         },
-        karma: {
-            options: {
-                configFile: 'karma.js',
-                singleRun: true
-            },
-            continuous: {
-                browsers: [ 'Firefox', 'PhantomJS' ]
-            },
-            dev: {
-                browsers: [ 'Chrome', 'Firefox', 'PhantomJS' ],
-                background: true
-            }
-        },
         mdoc: {
             options: {
                 baseTitle: 'DexterJS',
@@ -104,8 +91,7 @@ module.exports = function( grunt ) {
         'grunt-contrib-concat',
         'grunt-contrib-uglify',
         'grunt-contrib-nodeunit',
-        'grunt-contrib-watch',
-        'grunt-karma'
+        'grunt-contrib-watch'
     ].forEach( function( task ) {
         grunt.loadNpmTasks( task );
     });
@@ -123,6 +109,6 @@ module.exports = function( grunt ) {
     });
 
     // Default task.
-    grunt.registerTask( 'default', 'jshint qunit karma:dev concat uglify nodeunit'.split( ' ' ) );
+    grunt.registerTask( 'default', 'jshint qunit concat uglify nodeunit'.split( ' ' ) );
 
 };
