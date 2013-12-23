@@ -1,5 +1,5 @@
 /*globals Dexter:true*/
-(function( globalObj, Dexter, undefined ) {
+(function( globalObj, Dexter, isNode, undefined ) {
     /* var declarations */
     var ajaxObjs = {},
             statusCodes,
@@ -570,4 +570,8 @@
         return new CreateFakeXHR();
     };
 
-}( this, Dexter ));
+    if(isNode){
+        module.exports = Dexter;
+    }
+
+}( this, (Dexter || global.Dexter), (typeof module === 'object' && module && typeof module.exports === 'object' && module.exports) ));

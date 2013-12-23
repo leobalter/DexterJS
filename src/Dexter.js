@@ -5,7 +5,7 @@
  * Copyright (c) 2012 Leonardo Balter
  * Licensed under the MIT, GPL licenses.
  */
-(function( globalObj ) {
+(function( globalObj, isNode ) {
     var Dexter = {
             stored : []
         },
@@ -96,4 +96,9 @@
     Dexter.fake = createDexterObj( 'fake' );
     Dexter.restore = restoreAll;
 
-}( this ));
+    if(isNode){
+        global.Dexter = Dexter;
+        module.exports = Dexter;
+    }
+
+}( this, (typeof module === 'object' && module && typeof module.exports === 'object' && module.exports) ));
