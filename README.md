@@ -7,8 +7,8 @@ Dexter is a simple Test Helper to mock and spy methods and to fake the Ajax inte
 ## Getting Started
 Download the [production version][min] or the [development version][max].
 
-[min]: https://raw.github.com/leobalter/DexterJS/master/dist/Dexter.min.js
-[max]: https://raw.github.com/leobalter/DexterJS/master/dist/Dexter.js
+[min]: https://raw.github.com/leobalter/DexterJS/master/dist/dexter.min.js
+[max]: https://raw.github.com/leobalter/DexterJS/master/dist/dexter.js
 
 ## Documentation
 
