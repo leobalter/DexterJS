@@ -1,4 +1,4 @@
-/*! DexterJS - v0.3.1 - 2013-12-23
+/*! DexterJS - v0.4.1 - 2013-12-23
  * https://github.com/leobalter/DexterJS
  * Copyright (c) 2013 Leonardo Balter; Licensed MIT, GPL */
 (function( globalObj, isNode ) {
