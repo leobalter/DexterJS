@@ -47,7 +47,7 @@ module.exports = function( grunt ) {
             all: [ 'test/*.html' ]
         },
         nodeunit: {
-            all: ['test/test-node.js']
+            all: [ 'test/test-node.js' ]
         },
         jshint: {
             all: {

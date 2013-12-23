@@ -29,7 +29,7 @@
     "dependencies": {},
     "keywords": [],
     "scripts": {
-        "test": "grunt -v jshint qunit karma:continuous"
+        "test": "grunt -v jshint qunit nodeunit karma:continuous"
     },
     "devDependencies": {
         "grunt": "~0.4.2",
