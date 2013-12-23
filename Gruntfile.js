@@ -67,21 +67,56 @@ module.exports = function( grunt ) {
                 background: true
             }
         },
+        mdoc: {
+            options: {
+                baseTitle: 'DexterJS',
+                indexContentPath: 'README.md'
+            },
+            docs: {
+                files: {
+                    'docs/html': 'docs'
+                }
+            }
+        },
         watch: {
-            files: [
-                'src/**/*.js',
-                'test/**/*.js'
-            ],
-            tasks: 'lint qunit concat uglify'
+            code : {
+                files: [
+                    'src/**/*.js',
+                    'test/**/*.js'
+                ],
+                tasks: 'lint qunit concat uglify'
+            },
+            docs : {
+                files : [
+                    '<%= mdoc.src %>'
+                ],
+                tasks: 'mdoc'
+            }
         }
     });
 
-    grunt.loadNpmTasks( 'grunt-contrib-jshint' );
-    grunt.loadNpmTasks( 'grunt-qunit-istanbul' );
-    grunt.loadNpmTasks( 'grunt-contrib-concat' );
-    grunt.loadNpmTasks( 'grunt-contrib-uglify' );
-    grunt.loadNpmTasks( 'grunt-contrib-watch' );
-    grunt.loadNpmTasks( 'grunt-karma' );
+    [
+        'grunt-contrib-jshint',
+        'grunt-qunit-istanbul',
+        'grunt-contrib-concat',
+        'grunt-contrib-uglify',
+        'grunt-contrib-watch',
+        'grunt-karma'
+    ].forEach( function( task ) {
+        grunt.loadNpmTasks( task );
+    });
+
+    grunt.registerMultiTask( 'mdoc', function () {
+        var opts = this.options(),
+            mdoc = require( 'mdoc' );
+
+        this.files.forEach( function ( file ) {
+            opts.inputDir = file.src[ 0 ];
+            opts.outputDir = file.dest;
+
+            mdoc.run( opts );
+        });
+    });
 
     // Default task.
     grunt.registerTask( 'default', 'jshint qunit karma:dev concat uglify'.split( ' ' ) );
