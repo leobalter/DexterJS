@@ -3,6 +3,5 @@ node_modules/
 
 coverage/*
 !coverage/.gitkeep
-dist/*
-!dist/.gitkeep
+
 docs/html/

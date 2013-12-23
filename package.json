@@ -1,47 +1,48 @@
 {
-  "name": "dexter",
-  "title": "DexterJS",
-  "description": "Dexter is a simple Test Helper to mock and spy methods and to fake the Ajax interface. It's framework independent, running with QUnit, Jasmine, Mocha, etc.",
-  "version": "0.3.1",
-  "homepage": "https://github.com/leobalter/DexterJS",
-  "author": {
-    "name": "Leonardo Balter",
-    "email": "leonardo.balter@gmail.com",
-    "url": "https://github.com/leobalter"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/leobalter/DexterJS.git"
-  },
-  "bugs": {
-    "url": "https://github.com/leobalter/DexterJS/issues"
-  },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/leobalter/DexterJS/blob/master/LICENSE-MIT"
+    "name": "dexter",
+    "title": "DexterJS",
+    "description": "Dexter is a simple Test Helper to mock and spy methods and to fake the Ajax interface. It's framework independent, running with QUnit, Jasmine, Mocha, etc.",
+    "version": "0.3.1",
+    "homepage": "https://github.com/leobalter/DexterJS",
+    "author": {
+        "name": "Leonardo Balter",
+        "email": "leonardo.balter@gmail.com",
+        "url": "https://github.com/leobalter"
     },
-    {
-      "type": "GPL",
-      "url": "https://github.com/leobalter/DexterJS/blob/master/LICENSE-GPL"
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/leobalter/DexterJS.git"
+    },
+    "bugs": {
+        "url": "https://github.com/leobalter/DexterJS/issues"
+    },
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "https://github.com/leobalter/DexterJS/blob/master/LICENSE-MIT"
+        },
+        {
+            "type": "GPL",
+            "url": "https://github.com/leobalter/DexterJS/blob/master/LICENSE-GPL"
+        }
+    ],
+    "dependencies": {},
+    "keywords": [],
+    "scripts": {
+        "test": "grunt -v jshint qunit karma:continuous"
+    },
+    "devDependencies": {
+        "grunt": "~0.4.2",
+        "grunt-contrib-jshint": "~0.7.2",
+        "grunt-qunit-istanbul": "~0.3.0",
+        "grunt-contrib-concat": "~0.3.0",
+        "grunt-contrib-uglify": "~0.2.7",
+        "grunt-contrib-watch": "~0.5.3",
+        "grunt-contrib-nodeunit": "~0.2.2",
+        "karma": "~0.10.7",
+        "karma-qunit": "~0.1.1",
+        "karma-phantomjs-launcher": "~0.1.1",
+        "grunt-karma": "~0.6.2",
+        "mdoc": "~0.3.4"
     }
-  ],
-  "dependencies": {},
-  "keywords": [],
-  "scripts": {
-    "test": "grunt -v jshint qunit karma:continuous"
-  },
-  "devDependencies": {
-    "grunt": "~0.4.2",
-    "grunt-contrib-jshint": "~0.7.2",
-    "grunt-qunit-istanbul": "~0.3.0",
-    "grunt-contrib-concat": "~0.3.0",
-    "grunt-contrib-uglify": "~0.2.7",
-    "grunt-contrib-watch": "~0.5.3",
-    "karma": "~0.10.7",
-    "karma-qunit": "~0.1.1",
-    "karma-phantomjs-launcher": "~0.1.1",
-    "grunt-karma": "~0.6.2",
-    "mdoc": "~0.3.4"
-  }
 }
