@@ -18,7 +18,7 @@ The project documentation files are located in https://raw.github.com/leobalter/
 
 You are welcome to join us on the list of [contributors](https://github.com/leobalter/DexterJS/graphs/contributors) for this project on *Github*.
 
-Please, check the [Contributing](https://raw.github.com/leobalter/DexterJS/master/docs/Contributing.md) documentation, there're just a few steps.
+Please, check the [Contributing](https://github.com/leobalter/DexterJS/blob/master/docs/Contributing.md) documentation, there're just a few steps.
 
 ## License
 Copyright (c) 2012 Leonardo Balter
