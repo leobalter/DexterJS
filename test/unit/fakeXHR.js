@@ -74,12 +74,12 @@
     test( 'fakeXHR.respond without index', 4, function() {
         var myFake = Dexter.fakeXHR(),
                 xhr = getXHR(),
-                stub = Dexter.stub( xhr, '__DexterRespond' ),
+                fake = Dexter.fake( xhr, '__DexterRespond' ),
                 params = { 
                         body : 'foo' 
                 };
 
-        stub.callback = function( arg1 ) {
+        fake.callback = function( arg1 ) {
             strictEqual( arg1, params, '__DexterRespond called with .respond first argument' );
             strictEqual( this, xhr, '__DexterRespond this === xhr' );
         };
@@ -94,19 +94,19 @@
         strictEqual( myFake.doneRequests[0], xhr, 'doneRequests receives xhr object' );
 
         myFake.restore();
-        stub.restore();
+        fake.restore();
     });
 
     test( 'fakeXHR.respond with index', 3, function() {
         var myFake = Dexter.fakeXHR(),
                 xhr = getXHR(),
                 xhr2 = getXHR(),
-                stub = Dexter.stub( xhr2, '__DexterRespond' ),
+                fake = Dexter.fake( xhr2, '__DexterRespond' ),
                 params = { 
                         body : 'foo' 
                 }; 
 
-        stub.callback = function( arg1 ) {
+        fake.callback = function( arg1 ) {
             strictEqual( this, xhr2, '__DexterRespond this === xhr' );
         };
 
@@ -120,7 +120,7 @@
         strictEqual( myFake.doneRequests[0], xhr2, 'doneRequests receives xhr object' );
 
         myFake.restore();
-        stub.restore();
+        fake.restore();
     });
 
     test( 'fakeXHR.spy and sync ajax Calls', 2, function() {

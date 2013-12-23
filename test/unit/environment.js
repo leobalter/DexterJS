@@ -27,7 +27,7 @@
 
     test( 'Dexter functions', 3, function() {
         equal( typeof( Dexter.spy ), 'function', 'Dexter.spy is a function' );
-        equal( typeof( Dexter.stub ), 'function', 'Dexter.stub is a function' );
+        equal( typeof( Dexter.fake ), 'function', 'Dexter.fake is a function' );
         equal( typeof( Dexter.fakeXHR ), 'function', 'Dexter.fakeXHR is a function' );
     });
 
