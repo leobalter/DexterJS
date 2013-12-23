@@ -46,6 +46,9 @@ module.exports = function( grunt ) {
             },
             all: [ 'test/*.html' ]
         },
+        nodeunit: {
+            all: ['test/test-node.js']
+        },
         jshint: {
             all: {
                 options: {
@@ -81,9 +84,10 @@ module.exports = function( grunt ) {
     grunt.loadNpmTasks( 'grunt-contrib-concat' );
     grunt.loadNpmTasks( 'grunt-contrib-uglify' );
     grunt.loadNpmTasks( 'grunt-contrib-watch' );
+    grunt.loadNpmTasks( 'grunt-contrib-nodeunit' );
     grunt.loadNpmTasks( 'grunt-karma' );
 
     // Default task.
-    grunt.registerTask( 'default', 'jshint qunit karma:dev concat uglify'.split( ' ' ) );
+    grunt.registerTask( 'default', 'jshint qunit karma:dev concat uglify nodeunit'.split( ' ' ) );
 
 };
