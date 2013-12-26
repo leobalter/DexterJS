@@ -42,3 +42,7 @@ Please, check the [Contributing](https://github.com/leobalter/DexterJS/blob/mast
 ## License
 Copyright (c) 2012 Leonardo Balter
 Licensed under the MIT and GPL licenses.
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/leobalter/dexterjs/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
