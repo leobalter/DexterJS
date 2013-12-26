@@ -1,4 +1,4 @@
-# Dexter JS 0.4.2
+# Dexter JS 0.4.3
 
 Dexter is a simple Test Helper to mock and spy methods and to fake the Ajax interface. It's framework independent, running with QUnit, Jasmine, Mocha, etc.
 
