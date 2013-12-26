@@ -1,10 +1,30 @@
 (function () {
     var Dexter, globalObj,
-        statusCodes, unsafeHeaders, fakeXHRObj, CreateFakeXHR,
+        statusCodes, unsafeHeaders, fakeXHRObj, CreateFakeXHR, xhrName,
         ajaxObjs = {};
 
-    // environment check
-    if ( !module || typeof module.exports === 'undefined' ) {
+    /***
+     * checks for XHR existence
+     * returns => XHR fn name || false
+     ***/
+    ajaxObjs.xhr = (function () {
+        var xhr;
+        try {
+            xhr = new XMLHttpRequest();
+            xhrName = 'XMLHttpRequest';
+            return XMLHttpRequest;
+        } catch( e ) {}
+
+        try {
+            xhr = new ActiveXObject( 'Microsoft.XMLHTTP' );
+            xhrName = 'ActiveXObject';
+            return ActiveXObject;
+        } catch( e ) {}
+
+        return false;
+    }());
+
+    if ( ajaxObjs.xhr ) {
         Dexter = window.Dexter;
         globalObj = window;
     } else {
@@ -19,34 +39,6 @@
     Dexter.fakeXHR = function () {
         return new CreateFakeXHR();
     };
-
-    /***
-     * checks for XHR existence
-     * returns => XHR fn || false
-     ***/
-    ajaxObjs.xhr = (function () {
-        var xhr;
-        try {
-            xhr = new XMLHttpRequest();
-            return XMLHttpRequest;
-        } catch( e ) {
-            return false;
-        }
-    }());
-
-    /***
-     * checks for ActiveXObject XHR existence
-     * returns => ActiveX XHR fn || false
-     ***/
-    ajaxObjs.actX = (function () {
-        var xhr;
-        try {
-            xhr = new ActiveXObject( 'Microsoft.XMLHTTP' );
-            return ActiveXObject;
-        } catch( e ) {
-            return false;
-        }
-    }());
 
     // Status code and their respective texts
     statusCodes = {
@@ -466,10 +458,8 @@
      * this is a constructor and should be called with 'new'
      ***/
     CreateFakeXHR = function () {
-        var DexterXHR = this,
-            FakeRequest,
-            FakeXMLHttpRequest,
-            FakeActiveXObject;
+        var FakeRequest, fakeObj,
+            DexterXHR = this;
 
         /***
          * requests will contain all requests made on the fakeXHR object´s lifecycle
@@ -500,28 +490,14 @@
             }
         };
 
-        // I can sacrifice these 2 to improve in performance,
-        // how dumb can be the ActiveXObject detection?
-        // I'm not feeling I'll need this.
-        FakeXMLHttpRequest = function () {
-            FakeRequest.call( this, arguments, 'XMLHttpRequest' );
-        };
-
-        FakeActiveXObject = function () {
-            FakeRequest.call( this, arguments, 'ActiveXObject' );
+        fakeObj = function () {
+            FakeRequest.call( this, arguments, xhrName );
         };
 
         // we import the fake XHR prototype to both methods
-        FakeXMLHttpRequest.prototype = fakeXHRObj;
-        FakeActiveXObject.prototype = fakeXHRObj;
+        fakeObj.prototype = fakeXHRObj;
 
-        if ( ajaxObjs.xhr ) {
-            globalObj.XMLHttpRequest = FakeXMLHttpRequest;
-        }
-
-        if ( ajaxObjs.actX ) {
-            globalObj.ActiveXObject = FakeActiveXObject;
-        }
+        globalObj[ xhrName ] = fakeObj;
     };
 
     /***
@@ -566,13 +542,7 @@
             if ( this.__spy ) {
                 this.__spy.restore();
             }
-            if ( ajaxObjs.xhr ) {
-                globalObj.XMLHttpRequest = ajaxObjs.xhr;
-            }
-
-            if ( ajaxObjs.actX ) {
-                globalObj.ActiveXObject = ajaxObjs.actX;
-            }
+            globalObj[ xhrName ] = ajaxObjs.xhr;
         }
     };
 
