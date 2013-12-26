@@ -31,7 +31,7 @@
 
     test( '.open()', 9, function() {
         var myFake = this.myFake,
-                xhr = this.xhr;
+            xhr = this.xhr;
 
         raises( function() {
             xhr.open();
@@ -180,7 +180,7 @@
 
     test( '.getAllResponseHeaders()', function() {
         var xhr = this.xhr,
-                returned;
+            returned;
 
         xhr.responseHeaders = {
             testA: '1',
@@ -203,11 +203,11 @@
 
     test( '.__DexterSetResponseHeaders()', 6, function() {
         var xhr = this.xhr,
-                foo = {
-                    testA: '1',
-                    testB: '2'
-                },
-                fooCount = 0;
+            foo = {
+                testA: '1',
+                testB: '2'
+            },
+            fooCount = 0;
 
         xhr.async = true;
         xhr.readyState = 0;
@@ -235,17 +235,17 @@
 
     test( '.__DexterSetResponseBody()', 21, function() {
         var xhr = this.xhr,
-                textContent = '',
-                foo = 'Dexter is a simple Test Helper, framework independent.',
-                count = 0,
-                bar = [
-                    '',
-                    'Dexter is ',
-                    'Dexter is a simple T',
-                    'Dexter is a simple Test Helper',
-                    'Dexter is a simple Test Helper, framewor',
-                    'Dexter is a simple Test Helper, framework independ'
-                ];
+            textContent = '',
+            foo = 'Dexter is a simple Test Helper, framework independent.',
+            count = 0,
+            bar = [
+                '',
+                'Dexter is ',
+                'Dexter is a simple T',
+                'Dexter is a simple Test Helper',
+                'Dexter is a simple Test Helper, framewor',
+                'Dexter is a simple Test Helper, framework independ'
+            ];
 
         xhr.responseText = '';
         xhr.async = true;
@@ -268,7 +268,8 @@
         xhr.async = false;
         xhr.__DexterSetResponseBody( foo );
 
-        textContent = xhr.responseXML.childNodes[0].textContent || xhr.responseXML.childNodes[0].text; // .text for IE8/IE7 and .textContent for anything else
+        // .text for IE8
+        textContent = xhr.responseXML.childNodes[0].textContent || xhr.responseXML.childNodes[0].text;
 
         strictEqual( xhr.responseXML.childNodes[0].tagName, 'js', 'xml tagName is set' );
         strictEqual( textContent, 'Dexter', 'xml textContent is set' );
@@ -276,13 +277,13 @@
 
     test( '__DexterRespond', 9, function() {
         var xhr = this.xhr,
-                params = {
-                    body : 'Dexter is a simple Test Helper, framework independent.',
-                    headers : { foo: 'bar' }
-                },
-                // yay! using a spy
-                spyResponseBody = Dexter.spy( xhr, '__DexterSetResponseBody' ),
-                spyResponseHeaders = Dexter.spy( xhr, '__DexterSetResponseHeaders' );
+            params = {
+                body : 'Dexter is a simple Test Helper, framework independent.',
+                headers : { foo: 'bar' }
+            },
+            // yay! using a spy
+            spyResponseBody = Dexter.spy( xhr, '__DexterSetResponseBody' ),
+            spyResponseHeaders = Dexter.spy( xhr, '__DexterSetResponseHeaders' );
 
         xhr.async = true;
         xhr.onreadystatechange = function() {
@@ -314,11 +315,11 @@
 
     test( '__DexterRespond alternatives', 7, function() {
         var xhr = this.xhr,
-                params = {
-                    body : '',
-                    status : 404
-                },
-                keepTrue = true;
+            params = {
+                body : '',
+                status : 404
+            },
+            keepTrue = true;
 
         xhr.async = false;
         xhr.onreadystatechange = function() {
