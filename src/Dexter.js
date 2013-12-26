@@ -6,13 +6,13 @@
  * Licensed under the MIT, GPL licenses.
  */
 'use strict';
-(function() {
+(function () {
     var Dexter = {
             stored : []
         },
         restore, actions;
 
-    restore = function() {
+    restore = function () {
         this._seenObj[ this._seenMethod ] = this._oldCall;
         this.isActive = false;
     };
@@ -60,7 +60,7 @@
 
         setDexterObjs( this, obj, method );
 
-        obj[ method ] = function() {
+        obj[ method ] = function () {
             var args = [].slice.apply( arguments );
 
             that.called = that.called + 1;

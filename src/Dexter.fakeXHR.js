@@ -1,4 +1,4 @@
-(function() {
+(function () {
     var Dexter, globalObj,
         statusCodes, unsafeHeaders, fakeXHRObj, CreateFakeXHR,
         ajaxObjs = {};
@@ -9,7 +9,7 @@
         globalObj = window;
     } else {
         // no need to setup fakeXHR for node environment
-        module.exports = function() { return {}; };
+        module.exports = function () { return {}; };
         return false;
     }
 
@@ -24,7 +24,7 @@
      * checks for XHR existence
      * returns => XHR fn || false
      ***/
-    ajaxObjs.xhr = (function() {
+    ajaxObjs.xhr = (function () {
         var xhr;
         try {
             xhr = new XMLHttpRequest();
@@ -38,7 +38,7 @@
      * checks for ActiveXObject XHR existence
      * returns => ActiveX XHR fn || false
      ***/
-    ajaxObjs.actX = (function() {
+    ajaxObjs.actX = (function () {
         var xhr;
         try {
             xhr = new ActiveXObject( 'Microsoft.XMLHTTP' );
@@ -192,7 +192,7 @@
         /***
          * fake .abort
          ***/
-        abort                   : function() {
+        abort                   : function () {
             // reseting properties
             this.aborted = true;
             this.errorFlag = true;
@@ -327,7 +327,7 @@
         /***
          * fake getAllResponseHeaders
          ***/
-        getAllResponseHeaders   : function() {
+        getAllResponseHeaders   : function () {
             var headers = '',
                     header;
 
@@ -454,10 +454,10 @@
         }
         /***
          * not implemented yet XHR functions
-         * upload                  : function() {},
-         * getInterface            : function() {},
-         * overrideMimeType        : function() {},
-         * sendAsBinary            : function() {}
+         * upload                  : function () {},
+         * getInterface            : function () {},
+         * overrideMimeType        : function () {},
+         * sendAsBinary            : function () {}
          ***/
     };
 
@@ -465,7 +465,7 @@
      * CreateFakeXHR builds the fakeXHR object
      * this is a constructor and should be called with 'new'
      ***/
-    CreateFakeXHR = function() {
+    CreateFakeXHR = function () {
         var DexterXHR = this,
             FakeRequest,
             FakeXMLHttpRequest,
@@ -503,11 +503,11 @@
         // I can sacrifice these 2 to improve in performance,
         // how dumb can be the ActiveXObject detection?
         // I'm not feeling I'll need this.
-        FakeXMLHttpRequest = function() {
+        FakeXMLHttpRequest = function () {
             FakeRequest.call( this, arguments, 'XMLHttpRequest' );
         };
 
-        FakeActiveXObject = function() {
+        FakeActiveXObject = function () {
             FakeRequest.call( this, arguments, 'ActiveXObject' );
         };
 
@@ -562,7 +562,7 @@
          * restore the XHR objects to their original states, defaking them
          * this won´t affect already created fake ajax requests.
          ***/
-        restore : function() {
+        restore : function () {
             if ( this.__spy ) {
                 this.__spy.restore();
             }
