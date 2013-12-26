@@ -10,6 +10,25 @@ Download the [production version][min] or the [development version][max].
 [min]: https://raw.github.com/leobalter/DexterJS/master/dist/dexter.min.js
 [max]: https://raw.github.com/leobalter/DexterJS/master/dist/dexter.js
 
+## Support
+
+Dexter is supported and tested on:
+
+### Node
+- 0.8
+- 0.10
+
+### Desktop
+- Firefox 4+
+- Chrome 18+
+- Internet Explorer 8+
+- Safari 7+ (Mac OS)
+
+### Mobile
+- Firefox for Android 23+
+- Chrome (Android)
+- iOS 6+
+
 ## Documentation
 
 The project documentation files are located in https://raw.github.com/leobalter/DexterJS/master/docs
