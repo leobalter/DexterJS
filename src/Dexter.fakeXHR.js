@@ -1,6 +1,6 @@
 (function () {
     var Dexter, globalObj,
-        statusCodes, unsafeHeaders, fakeXHRObj, CreateFakeXHR, xhrName,
+        statusCodes, unsafeHeaders, fakeXHRObj, CreateFakeXHR,
         ajaxObjs = {};
 
     /***
@@ -11,17 +11,10 @@
         var xhr;
         try {
             xhr = new XMLHttpRequest();
-            xhrName = 'XMLHttpRequest';
             return XMLHttpRequest;
-        } catch( e ) {}
-
-        try {
-            xhr = new ActiveXObject( 'Microsoft.XMLHTTP' );
-            xhrName = 'ActiveXObject';
-            return ActiveXObject;
-        } catch( e ) {}
-
-        return false;
+        } catch( e ) {
+            return false;
+        }
     }());
 
     if ( ajaxObjs.xhr ) {
@@ -469,35 +462,26 @@
         this.doneRequests = [];
 
         /***
-         * this is the fake request function, and this will be applied to
-         * XMLHttpRequest and/or ActiveXObject regarding their availability
+         * this is the fake request function to be applied to XMLHttpRequest
          ***/
-        FakeRequest = function( argsObj, type ) {
-            var args = [].slice.call( argsObj );
-
+        FakeRequest = function () {
             // creating a reference of xhr object in Dexter.fakeXHR() object
             DexterXHR.requests.push( this );
 
             // we set a timeStamp on __DexterRef to identify requests
             this.__DexterRef = Date.now();
 
-            // we need an ActiveXObject fallback if an external
-            // script is trying request any other funcionality
-            if ( type === 'ActiveXObject' && args[0] !== 'Microsoft.XMLHTTP' ) {
-                return ajaxObjs( args );
-            } else {
-                return this;
-            }
+            return this;
         };
 
         fakeObj = function () {
-            FakeRequest.call( this, arguments, xhrName );
+            FakeRequest.call( this );
         };
 
         // we import the fake XHR prototype to both methods
         fakeObj.prototype = fakeXHRObj;
 
-        globalObj[ xhrName ] = fakeObj;
+        globalObj.XMLHttpRequest = fakeObj;
     };
 
     /***
@@ -542,7 +526,7 @@
             if ( this.__spy ) {
                 this.__spy.restore();
             }
-            globalObj[ xhrName ] = ajaxObjs.xhr;
+            globalObj.XMLHttpRequest = ajaxObjs.xhr;
         }
     };
 
