@@ -5,24 +5,22 @@
  * Copyright (c) 2012 Leonardo Balter
  * Licensed under the MIT, GPL licenses.
  */
-(function( globalObj, isNode ) {
+'use strict';
+(function() {
     var Dexter = {
             stored : []
         },
         restore, actions;
-
-    // referencing to the global scope
-    globalObj.Dexter = Dexter;
 
     restore = function() {
         this._seenObj[ this._seenMethod ] = this._oldCall;
         this.isActive = false;
     };
 
-    function setDexterObjs( obj, method ) {
-        this._oldCall = obj[ method ];
-        this._seenObj = obj;
-        this._seenMethod = method;
+    function setDexterObjs( scope, obj, method ) {
+        scope._oldCall = obj[ method ];
+        scope._seenObj = obj;
+        scope._seenMethod = method;
     }
 
     actions = {
@@ -60,7 +58,7 @@
             this.callback = callback;
         }
 
-        setDexterObjs.call( this, obj, method );
+        setDexterObjs( this, obj, method );
 
         obj[ method ] = function() {
             var args = [].slice.apply( arguments );
@@ -96,9 +94,12 @@
     Dexter.fake = createDexterObj( 'fake' );
     Dexter.restore = restoreAll;
 
-    if(isNode){
-        global.Dexter = Dexter;
+    // referencing to the global scope
+    if ( !module || typeof module.exports === 'undefined' ) {
+        window.Dexter = Dexter;
+    } else {
+        // for CommonJS environments, export everything
         module.exports = Dexter;
     }
 
-}( this, (typeof module === 'object' && module && typeof module.exports === 'object' && module.exports) ));
+}());

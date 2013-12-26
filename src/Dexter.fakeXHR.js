@@ -1,11 +1,24 @@
-/*globals Dexter:true*/
-(function( globalObj, Dexter, isNode, undefined ) {
-    /* var declarations */
-    var ajaxObjs = {},
-            statusCodes,
-            unsafeHeaders,
-            fakeXHRObj,
-            CreateFakeXHR;
+(function() {
+    var Dexter, globalObj,
+        statusCodes, unsafeHeaders, fakeXHRObj, CreateFakeXHR,
+        ajaxObjs = {};
+
+    // environment check
+    if ( !module || typeof module.exports === 'undefined' ) {
+        Dexter = window.Dexter;
+        globalObj = window;
+    } else {
+        // no need to setup fakeXHR for node environment
+        module.exports = function() { return {}; };
+        return false;
+    }
+
+    /***
+     * this exports the fakeXHR method to Dexter.
+     ***/
+    Dexter.fakeXHR = function () {
+        return new CreateFakeXHR();
+    };
 
     /***
      * checks for XHR existence
@@ -454,9 +467,9 @@
      ***/
     CreateFakeXHR = function() {
         var DexterXHR = this,
-                FakeRequest,
-                FakeXMLHttpRequest,
-                FakeActiveXObject;
+            FakeRequest,
+            FakeXMLHttpRequest,
+            FakeActiveXObject;
 
         /***
          * requests will contain all requests made on the fakeXHR object´s lifecycle
@@ -563,15 +576,4 @@
         }
     };
 
-    /***
-     * this exports the fakeXHR method to Dexter.
-     ***/
-    Dexter.fakeXHR = function fakeXHR() {
-        return new CreateFakeXHR();
-    };
-
-    if(isNode){
-        module.exports = Dexter;
-    }
-
-}( this, (Dexter || global.Dexter), (typeof module === 'object' && module && typeof module.exports === 'object' && module.exports) ));
+}());

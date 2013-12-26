@@ -13,5 +13,5 @@
     "boss": true,
     "eqnull": true,
     "node": true,
-    "predef": [ "document", "ActiveXObject", "XMLHttpRequest" ]
+    "predef": [ "window", "document", "ActiveXObject", "XMLHttpRequest" ]
 }

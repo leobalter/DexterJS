@@ -1,6 +1,7 @@
 'use strict';
 
-var Dexter = require('../dist/dexter');
+var Dexter = require( '../src/Dexter' );
+var Dexter_fakeXHR = require( '../src/Dexter.fakeXHR' );
 
 exports.Environment = {
     'Dexter is Here!': function(test){
@@ -14,7 +15,7 @@ exports.Environment = {
         test.expect(3);
         test.equal( typeof( Dexter.spy ), 'function', 'Dexter.spy is a function' );
         test.equal( typeof( Dexter.fake ), 'function', 'Dexter.fake is a function' );
-        test.equal( typeof( Dexter.fakeXHR ), 'function', 'Dexter.fakeXHR is a function' );
+        test.equal( typeof( Dexter.fakeXHR ), 'undefined', 'Dexter.fakeXHR is a not function on Node environment' );
         test.done();
     }
 };
