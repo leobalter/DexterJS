@@ -1,6 +1,4 @@
-node_modules/
 .DS_Store
-
-coverage/*
-
-docs/html/
+node_modules
+coverage
+docs/html
