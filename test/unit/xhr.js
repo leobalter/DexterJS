@@ -91,7 +91,7 @@
 
         xhr.abort();
     });
-    
+
     test( '.setRequestHeader()', 7, function() {
         var xhr = this.xhr;
 
@@ -206,7 +206,7 @@
                 foo = {
                     testA: '1',
                     testB: '2'
-                }, 
+                },
                 fooCount = 0;
 
         xhr.async = true;
@@ -235,6 +235,7 @@
 
     test( '.__DexterSetResponseBody()', 21, function() {
         var xhr = this.xhr,
+                textContent = '',
                 foo = 'Dexter is a simple Test Helper, framework independent.',
                 count = 0,
                 bar = [
@@ -267,8 +268,10 @@
         xhr.async = false;
         xhr.__DexterSetResponseBody( foo );
 
+        textContent = xhr.responseXML.childNodes[0].textContent || xhr.responseXML.childNodes[0].text; // .text for IE8/IE7 and .textContent for anything else
+
         strictEqual( xhr.responseXML.childNodes[0].tagName, 'js', 'xml tagName is set' );
-        strictEqual( xhr.responseXML.childNodes[0].textContent, 'Dexter', 'xml textContent is set' );
+        strictEqual( textContent, 'Dexter', 'xml textContent is set' );
     });
 
     test( '__DexterRespond', 9, function() {
@@ -284,7 +287,7 @@
         xhr.async = true;
         xhr.onreadystatechange = function() {
             if ( xhr.readyState === 4 ) {
-                ok( true, 'readystatechange / readyState === 4' );  
+                ok( true, 'readystatechange / readyState === 4' );
             }
         };
         spyResponseBody.callback = function( spyParam ) {
