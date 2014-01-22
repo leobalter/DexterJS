@@ -1,6 +1,6 @@
-/*! DexterJS - v0.4.3 - 2013-12-26
+/*! DexterJS - v0.4.3 - 2014-01-21
  * https://github.com/leobalter/DexterJS
- * Copyright (c) 2013 Leonardo Balter; Licensed MIT, GPL */
+ * Copyright (c) 2014 Leonardo Balter; Licensed MIT, GPL */
 'use strict';
 (function () {
     var Dexter = {
@@ -91,7 +91,7 @@
     Dexter.restore = restoreAll;
 
     // referencing to the global scope
-    if ( !module || typeof module.exports === 'undefined' ) {
+    if ( typeof module === 'undefined' || typeof module.exports === 'undefined' ) {
         window.Dexter = Dexter;
     } else {
         // for CommonJS environments, export everything
