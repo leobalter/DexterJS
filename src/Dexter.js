@@ -95,7 +95,7 @@
     Dexter.restore = restoreAll;
 
     // referencing to the global scope
-    if ( !module || typeof module.exports === 'undefined' ) {
+    if ( typeof module === 'undefined' || typeof module.exports === 'undefined' ) {
         window.Dexter = Dexter;
     } else {
         // for CommonJS environments, export everything
