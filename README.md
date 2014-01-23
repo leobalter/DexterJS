@@ -3,6 +3,7 @@
 Dexter is a simple Test Helper to mock and spy methods and to fake the Ajax interface. It's framework independent, running with QUnit, Jasmine, Mocha, etc.
 
 [![Build Status](https://travis-ci.org/leobalter/DexterJS.png?branch=master)](https://travis-ci.org/leobalter/DexterJS)
+[![Coverage Status](https://coveralls.io/repos/leobalter/DexterJS/badge.png)](https://coveralls.io/r/leobalter/DexterJS)
 
 ## Getting Started
 Download the [production version][min] or the [development version][max].

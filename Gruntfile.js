@@ -35,16 +35,23 @@ module.exports = function( grunt ) {
         },
         qunit: {
             options : {
+                timeout: 30000,
                 '--web-security': 'no',
                 coverage: {
                     src: [ 'src/**/*.js' ],
-                    instrumentedFiles: 'test/instrumented',
-                    htmlReport: 'coverage',
-                    coberturaReport: 'coverage',
+                    instrumentedFiles: 'test/temp',
+                    htmlReport: 'build/report/coverage',
+                    lcovReport: 'build/report/lcov',
                     linesThresholdPct: 80
                 }
             },
             all: [ 'test/*.html' ]
+        },
+        coveralls: {
+            all: {
+                // LCOV coverage file relevant to every target
+                src: 'build/report/lcov/lcov.info'
+            }
         },
         nodeunit: {
             all: [ 'test/test-node.js' ]
@@ -91,7 +98,8 @@ module.exports = function( grunt ) {
         'grunt-contrib-concat',
         'grunt-contrib-uglify',
         'grunt-contrib-nodeunit',
-        'grunt-contrib-watch'
+        'grunt-contrib-watch',
+        'grunt-coveralls'
     ].forEach( function( task ) {
         grunt.loadNpmTasks( task );
     });
