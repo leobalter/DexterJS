@@ -6,6 +6,7 @@ Dexter is a simple Test Helper to mock and spy methods and to fake the Ajax inte
 [![Coverage Status](https://coveralls.io/repos/leobalter/DexterJS/badge.png)](https://coveralls.io/r/leobalter/DexterJS)
 
 ## Getting Started
+
 Download the [production version][min] or the [development version][max].
 
 [min]: https://raw.github.com/leobalter/DexterJS/master/dist/dexter.min.js
@@ -16,7 +17,6 @@ Download the [production version][min] or the [development version][max].
 Dexter is supported and tested on:
 
 ### Node
-- 0.8
 - 0.10
 
 ### Desktop
