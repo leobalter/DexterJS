@@ -31,10 +31,9 @@ module.exports = function( grunt ) {
                 dest: 'dist/<%= pkg.name %>.min.js',
                 src: '<%= concat.dist.dest %>'
             }
-
         },
         qunit: {
-            options : {
+            options: {
                 timeout: 30000,
                 '--web-security': 'no',
                 coverage: {
@@ -57,11 +56,15 @@ module.exports = function( grunt ) {
             all: [ 'test/test-node.js' ]
         },
         jshint: {
-            all: {
-                options: {
-                    jshintrc: '.jshintrc'
-                },
-                src: [ 'Gruntfile.js', 'src/**/*.js' ]
+            options: {
+                jshintrc: '.jshintrc'
+            },
+            all: [ 'Gruntfile.js', 'src/**/*.js' ]
+        },
+        jscs: {
+            src: '<%= jshint.all %>',
+            options: {
+                preset: 'jquery'
             }
         },
         mdoc: {
@@ -76,15 +79,15 @@ module.exports = function( grunt ) {
             }
         },
         watch: {
-            code : {
+            code: {
                 files: [
                     'src/**/*.js',
                     'test/**/*.js'
                 ],
                 tasks: 'lint qunit concat uglify'
             },
-            docs : {
-                files : [
+            docs: {
+                files: [
                     '<%= mdoc.src %>'
                 ],
                 tasks: 'mdoc'
@@ -93,22 +96,23 @@ module.exports = function( grunt ) {
     });
 
     [
-        'grunt-contrib-jshint',
-        'grunt-qunit-istanbul',
         'grunt-contrib-concat',
-        'grunt-contrib-uglify',
+        'grunt-contrib-jshint',
         'grunt-contrib-nodeunit',
+        'grunt-contrib-uglify',
         'grunt-contrib-watch',
-        'grunt-coveralls'
+        'grunt-coveralls',
+        'grunt-jscs-checker',
+        'grunt-qunit-istanbul',
     ].forEach( function( task ) {
         grunt.loadNpmTasks( task );
     });
 
-    grunt.registerMultiTask( 'mdoc', function () {
+    grunt.registerMultiTask( 'mdoc', function() {
         var opts = this.options(),
             mdoc = require( 'mdoc' );
 
-        this.files.forEach( function ( file ) {
+        this.files.forEach( function( file ) {
             opts.inputDir = file.src[ 0 ];
             opts.outputDir = file.dest;
 
@@ -117,6 +121,6 @@ module.exports = function( grunt ) {
     });
 
     // Default task.
-    grunt.registerTask( 'default', 'jshint qunit concat uglify nodeunit'.split( ' ' ) );
+    grunt.registerTask( 'default', 'jshint jscs qunit concat uglify nodeunit'.split( ' ' ) );
 
 };

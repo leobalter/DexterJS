@@ -6,13 +6,13 @@
  * Licensed under the MIT, GPL licenses.
  */
 'use strict';
-(function () {
+(function() {
     var Dexter = {
-            stored : []
+            stored: []
         },
         restore, actions;
 
-    restore = function () {
+    restore = function() {
         this._seenObj[ this._seenMethod ] = this._oldCall;
         this.isActive = false;
     };
@@ -24,7 +24,7 @@
     }
 
     actions = {
-        'spy' : function( that, args ) {
+        'spy': function( that, args ) {
             // call order issues
             var returned = that._oldCall.apply( this, args );
 
@@ -34,7 +34,7 @@
             // calls the original method
             return returned;
         },
-        'fake' : function( that, args ) {
+        'fake': function( that, args ) {
             if ( typeof( that.callback ) === 'function' ) {
                 return that.callback.apply( this, args );
             }
@@ -60,7 +60,7 @@
 
         setDexterObjs( this, obj, method );
 
-        obj[ method ] = function () {
+        obj[ method ] = function() {
             var args = [].slice.apply( arguments );
 
             that.called = that.called + 1;
@@ -70,7 +70,7 @@
     }
 
     function createDexterObj( name ) {
-        return function ( obj, method, callback ) {
+        return function( obj, method, callback ) {
             var newObj = new DexterObj( name, obj, method, callback );
             Dexter.stored.push( newObj );
 
@@ -87,7 +87,7 @@
     }
 
     DexterObj.prototype = {
-        restore  : restore
+        restore: restore
     };
 
     Dexter.spy = createDexterObj( 'spy' );

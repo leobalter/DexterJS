@@ -1,4 +1,4 @@
-(function () {
+(function() {
     var Dexter, globalObj,
         statusCodes, unsafeHeaders, fakeXHRObj, CreateFakeXHR,
         ajaxObjs = {};
@@ -7,7 +7,7 @@
      * checks for XHR existence
      * returns => XHR fn name || false
      ***/
-    ajaxObjs.xhr = (function () {
+    ajaxObjs.xhr = (function() {
         var xhr;
         try {
             xhr = new XMLHttpRequest();
@@ -22,14 +22,14 @@
         globalObj = window;
     } else {
         // no need to setup fakeXHR for node environment
-        module.exports = function () { return {}; };
+        module.exports = function() { return {}; };
         return false;
     }
 
     /***
      * this exports the fakeXHR method to Dexter.
      ***/
-    Dexter.fakeXHR = function () {
+    Dexter.fakeXHR = function() {
         return new CreateFakeXHR();
     };
 
@@ -146,38 +146,38 @@
 
     fakeXHRObj = {
         // Status constants
-        UNSENT                  : 0,
-        OPENED                  : 1,
-        HEADERS_RECEIVED        : 2,
-        LOADING                 : 3,
-        DONE                    : 4,
+        UNSENT:                   0,
+        OPENED:                   1,
+        HEADERS_RECEIVED:         2,
+        LOADING:                  3,
+        DONE:                     4,
         // event handlers
-        onabort                 : null,
-        onerror                 : null,
-        onload                  : null,
-        onloadend               : null,
-        onloadstart             : null,
-        onprogress              : null,
-        onreadystatechange      : null,
-        ontimeout               : null,
+        onabort:                  null,
+        onerror:                  null,
+        onload:                   null,
+        onloadend:                null,
+        onloadstart:              null,
+        onprogress:               null,
+        onreadystatechange:       null,
+        ontimeout:                null,
         // readyState always start by 0
-        readyState              : 0,
+        readyState:               0,
         // other properties
-        response                : '',
-        responseText            : '',
-        responseType            : '',
-        responseXML             : null,
-        withCredentials         : false,
+        response:                 '',
+        responseText:             '',
+        responseType:             '',
+        responseXML:              null,
+        withCredentials:          false,
         // status code
-        status                  : 0,
+        status:                   0,
         // status text relative to the status code
-        statusText              : '',
+        statusText:               '',
         // timeout to be set, starts by 0
-        timeout                 : 0,
+        timeout:                  0,
         /***
          * fake .abort
          ***/
-        abort                   : function () {
+        abort:                    function() {
             // reseting properties
             this.aborted = true;
             this.errorFlag = true;
@@ -201,7 +201,7 @@
         /***
          * fake .getResponseHeader
          ***/
-        getResponseHeader      : function( key ) {
+        getResponseHeader:       function( key ) {
             var headerName,
                     responseHeaders = this.responseHeaders;
             // no return before receiving headers
@@ -233,7 +233,7 @@
         /***
          * fake .open
          ***/
-        open                    : function( method, url, async, username, password ) {
+        open:                     function( method, url, async, username, password ) {
             // method and url aren´t optional
             if ( typeof( method ) === 'undefined' || typeof( url ) === 'undefined' ) {
                 throw new Error( 'Not enough arguments' );
@@ -260,7 +260,7 @@
         /***
          * fake .send
          ***/
-        send                    : function( data ) {
+        send:                     function( data ) {
             var reqHeaders;
             // readyState verification (xhr should be already opened)
             verifyState( this.readyState, this.sendFlag );
@@ -290,7 +290,7 @@
         /***
          * fake .setRequestHeader
          ***/
-        setRequestHeader        : function( key, value ) {
+        setRequestHeader:         function( key, value ) {
             // readyState verification (xhr should be already opened)
             verifyState( this.readyState, this.sendFlag );
 
@@ -312,7 +312,7 @@
         /***
          * fake getAllResponseHeaders
          ***/
-        getAllResponseHeaders   : function () {
+        getAllResponseHeaders:    function() {
             var headers = '',
                     header;
 
@@ -351,11 +351,11 @@
         /***
          * __DexterXHR indicates this is a Dexter faked XHR
          ***/
-        __DexterXHR             : true,
+        __DexterXHR:              true,
         /***
          * __DexterStateChange handles events on readyState changes
          ***/
-        __DexterStateChange     : function( state ) {
+        __DexterStateChange:      function( state ) {
             var ev;
             this.readyState = state;
 
@@ -368,7 +368,7 @@
                     // dammit, IE7!
                     // TODO: this would break anyone´s code?
                     ev = {
-                        type : 'readystatechange'
+                        type: 'readystatechange'
                     };
                 }
 
@@ -379,7 +379,7 @@
         /***
          * __DexterSetResponseBody builds the response text.
          ***/
-        __DexterSetResponseBody   : function( body ) {
+        __DexterSetResponseBody:    function( body ) {
             var chunkSize = this.chunkSize || 10,
                     index = 0,
                     type;
@@ -413,7 +413,7 @@
          *   status : Number status code (Default: 200)
          * }
          ***/
-        __DexterRespond         : function( params ) {
+        __DexterRespond:          function( params ) {
             var body = params.body || '',
                     headers = params.headers || {},
                     DONE = this.DONE;
@@ -439,10 +439,10 @@
         }
         /***
          * not implemented yet XHR functions
-         * upload                  : function () {},
-         * getInterface            : function () {},
-         * overrideMimeType        : function () {},
-         * sendAsBinary            : function () {}
+         * upload:                   function() {},
+         * getInterface:             function() {},
+         * overrideMimeType:         function() {},
+         * sendAsBinary:             function() {}
          ***/
     };
 
@@ -450,7 +450,7 @@
      * CreateFakeXHR builds the fakeXHR object
      * this is a constructor and should be called with 'new'
      ***/
-    CreateFakeXHR = function () {
+    CreateFakeXHR = function() {
         var FakeRequest, fakeObj,
             DexterXHR = this;
 
@@ -464,7 +464,7 @@
         /***
          * this is the fake request function to be applied to XMLHttpRequest
          ***/
-        FakeRequest = function () {
+        FakeRequest = function() {
             // creating a reference of xhr object in Dexter.fakeXHR() object
             DexterXHR.requests.push( this );
 
@@ -474,7 +474,7 @@
             return this;
         };
 
-        fakeObj = function () {
+        fakeObj = function() {
             FakeRequest.call( this );
         };
 
@@ -492,7 +492,7 @@
         /***
          * interface to export xhr.__DexterRespond and set this.doneRequests
          ***/
-        respond : function( params, index ) {
+        respond: function( params, index ) {
             var xhr;
 
             params = params || {};
@@ -512,7 +512,7 @@
         /***
          * uses a Dexter.spy on xhr send requests
          ***/
-        spy : function( callback ) {
+        spy: function( callback ) {
             var spy = Dexter.spy( fakeXHRObj, 'send', callback );
             // this.__spy will be used on .restore();
             this.__spy = spy;
@@ -522,7 +522,7 @@
          * restore the XHR objects to their original states, defaking them
          * this won´t affect already created fake ajax requests.
          ***/
-        restore : function () {
+        restore: function() {
             if ( this.__spy ) {
                 this.__spy.restore();
             }
