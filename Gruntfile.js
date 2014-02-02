@@ -62,7 +62,7 @@ module.exports = function( grunt ) {
             options: {
                 jshintrc: '.jshintrc'
             },
-            all: [ 'Gruntfile.js', 'src/**/*.js' ]
+            all: [ 'Gruntfile.js', 'src/**/*.js', 'test/unit/*.js' ]
         },
         jscs: {
             src: '<%= jshint.all %>',

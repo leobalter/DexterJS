@@ -1,75 +1,66 @@
-(function( window ) {
-    /*
-        ======== A Handy Little QUnit Reference ========
-        http://docs.jquery.com/QUnit
+/* API Ref: http://api.qunitjs.com */
+/* globals Dexter:true, QUnit: true, expect: true */
 
-        Test methods:
-            expect(numAssertions)
-            stop(increment)
-            start(decrement)
-        Test assertions:
-            ok(value, [message])
-            equal(actual, expected, [message])
-            notEqual(actual, expected, [message])
-            deepEqual(actual, expected, [message])
-            notDeepEqual(actual, expected, [message])
-            strictEqual(actual, expected, [message])
-            notStrictEqual(actual, expected, [message])
-            raises(block, [expected], [message])
-    */
-
-    module( 'Dexter fake', {
-        setup : function() {
-            foo.bar = function() {
-                ok( false, 'fake shoud not call original method' );
-            };
-            this.fake = Dexter.fake( foo, 'bar' );
-        }
-    });
-
-    test( 'returned object', 2, function() {
-        equal( typeof( this.fake ), 'object', 'Dexter.fake returns and object' );
-        ok( this.fake.isActive, 'fake.isActive === true' );
-    });
-
-    test( 'call count', 11, function() {
-        var i;
-        for ( i = 0 ; i < 11 ; ++i ) {
-            deepEqual( this.fake.called, i, 'fake.called === ' + i );
-            foo.bar();
-        }
-    });
-
-    test( 'restore()', function() {
-        foo.otherBar = function() {
-            ok( true, 'fake restore objects' );
+QUnit.module( 'Dexter fake', {
+    setup: function( assert ) {
+        this.foo = {};
+        this.foo.bar = function() {
+            assert.ok( false, 'fake shoud not call original method' );
         };
+        this.fake = Dexter.fake( this.foo, 'bar' );
+    },
+    teardown: function() {
+        Dexter.restore();
+    }
+});
 
-        var fake = Dexter.fake( foo, 'otherBar' );
+QUnit.test( 'returned object', 2, function( assert ) {
+    expect( 2 );
 
-        fake.restore();
+    assert.equal( typeof( this.fake ), 'object', 'Dexter.fake returns and object' );
+    assert.ok( this.fake.isActive, 'fake.isActive === true' );
+});
 
-        foo.otherBar();
+QUnit.test( 'call count', function( assert ) {
+    expect( 11 );
 
-        deepEqual( fake.called, 0, 'restored fake should not be affected by further calls' );
-        deepEqual( fake.isActive, false, 'fake.isActive === false after restoring' );
+    for ( var i = 0 ; i < 11 ; ++i ) {
+        assert.deepEqual( this.fake.called, i, 'fake.called === ' + i );
+        this.foo.bar();
+    }
+});
+
+QUnit.test( 'restore()', function( assert ) {
+    this.foo.otherBar = function() {
+        assert.ok( true, 'fake restore objects' );
+    };
+
+    var fake = Dexter.fake( this.foo, 'otherBar' );
+
+    fake.restore();
+
+    this.foo.otherBar();
+
+    assert.deepEqual( fake.called, 0, 'restored fake should not be affected by further calls' );
+    assert.deepEqual( fake.isActive, false, 'fake.isActive === false after restoring' );
+});
+
+QUnit.test( 'callback()', function( assert ) {
+    expect( 4 );
+
+    this.fake.callback = function( a, b, c ) {
+        assert.ok( true, '.callback is set' );
+        assert.deepEqual( [ a, b, c ], [ 1, 2, 3 ], 'callback arguments working' );
+    };
+
+    this.foo.bar( 1, 2, 3 );
+
+    this.fake.restore();
+
+    this.fake = Dexter.fake( this.foo, 'bar', function() {
+        assert.ok( true, 'callback can be set at fake creation' );
+        return 17;
     });
 
-    test( 'callback()', 4, function() {
-        this.fake.callback = function( a, b, c ) {
-            ok( true, '.callback is set' );
-            deepEqual( [ a, b, c ], [ 1, 2, 3 ], 'callback arguments working' );
-        };
-
-        foo.bar( 1, 2, 3 );
-
-        this.fake.restore();
-
-        this.fake = Dexter.fake( foo, 'bar', function() {
-            ok( true, 'callback can be set at fake creation' );
-            return 17;
-        });
-
-        strictEqual( foo.bar(), 17, 'fake returned value set in callback' );
-    });
-}( this ) );
+    assert.strictEqual( this.foo.bar(), 17, 'fake returned value set in callback' );
+});

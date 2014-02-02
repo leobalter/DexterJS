@@ -1,74 +1,59 @@
-(function( window ) {
-    /*
-        ======== A Handy Little QUnit Reference ========
-        http://docs.jquery.com/QUnit
+/* API Ref: http://api.qunitjs.com */
+/* globals Dexter:true, QUnit: true, expect: true */
 
-        Test methods:
-            expect(numAssertions)
-            stop(increment)
-            start(decrement)
-        Test assertions:
-            ok(value, [message])
-            equal(actual, expected, [message])
-            notEqual(actual, expected, [message])
-            deepEqual(actual, expected, [message])
-            notDeepEqual(actual, expected, [message])
-            strictEqual(actual, expected, [message])
-            notStrictEqual(actual, expected, [message])
-            raises(block, [expected], [message])
-    */
+QUnit.module( 'Dexter.restore()', {
+    setup: function() {
+        this.myMock1 = function() {};
+        this.myMock2 = function() {};
+        this.myMock3 = function() {};
 
-    module( 'Dexter.restore()', {
-        setup : function () {
-            this.myMock1 = function() {};
-            this.myMock2 = function() {};
-            this.myMock3 = function() {};
-
-            this.fakes = [];
-            this.fakes.push( Dexter.fake( this, 'myMock1' ) );
-            this.fakes.push( Dexter.fake( this, 'myMock2' ) );
-            this.fakes.push( Dexter.spy( this, 'myMock3' ) );
-        },
-        teardown : function() {
-            while( this.fakes.length ) {
-                this.fakes.pop().restore();
-            }
+        this.fakes = [];
+        this.fakes.push( Dexter.fake( this, 'myMock1' ) );
+        this.fakes.push( Dexter.fake( this, 'myMock2' ) );
+        this.fakes.push( Dexter.spy( this, 'myMock3' ) );
+    },
+    teardown: function() {
+        while ( this.fakes.length ) {
+            this.fakes.pop().restore();
         }
+    }
+});
+
+QUnit.test( 'storing methods', function( assert ) {
+    expect( 3 );
+
+    var fakes = this.fakes,
+        stored = Dexter.stored,
+        item;
+
+    while ( fakes.length ) {
+        item = fakes.pop();
+        assert.strictEqual( stored.pop(), item, 'Dexter stored item' );
+
+        item.restore();
+    }
+});
+
+QUnit.test( 'restoring', function( assert ) {
+    assert.ok( Dexter.stored.length >= 3, 'Dexter.stored has items' );
+
+    assert.ok( Dexter.restore(), 'Dexter.restore() => true' );
+
+    assert.strictEqual( Dexter.stored.length, 0, 'Dexter.stored empty after Dexter.restore()' );
+});
+
+QUnit.test( 'restoring for sure', function( assert ) {
+    expect( 1 );
+
+    this.myFn = function() {
+        assert.ok( true, 'restored function working' );
+    };
+
+    Dexter.fake( this, 'myFn', function() {
+        throw 'do not call me';
     });
 
-    test( 'storing methods', 3, function () {
-        var fakes = this.fakes,
-            stored = Dexter.stored,
-            item;
+    Dexter.restore();
 
-        while ( fakes.length ) {
-            item = fakes.pop();
-            strictEqual( stored.pop(), item, 'Dexter stored item' );
-
-            item.restore();
-        }
-    });
-
-    test( 'restoring', function () {
-        ok( Dexter.stored.length >= 3, 'Dexter.stored has items' );
-
-        ok( Dexter.restore(), 'Dexter.restore() => true' );
-
-        strictEqual( Dexter.stored.length, 0, 'Dexter.stored empty after Dexter.restore()' );
-    });
-
-    test( 'restoring for sure', 1, function () {
-        this.myFn = function () {
-            ok( true, 'restored function working' );
-        };
-
-        Dexter.fake( this, 'myFn', function () {
-            throw 'do not call me';
-        });
-
-        Dexter.restore();
-
-        this.myFn();
-    });
-
-}( this ) );
+    this.myFn();
+});
