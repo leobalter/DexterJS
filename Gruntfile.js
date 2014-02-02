@@ -47,6 +47,9 @@ module.exports = function( grunt ) {
             all: [ 'test/*.html' ]
         },
         coveralls: {
+            options: {
+                force: true
+            },
             all: {
                 // LCOV coverage file relevant to every target
                 src: 'build/report/lcov/lcov.info'
