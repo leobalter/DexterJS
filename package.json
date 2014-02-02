@@ -26,8 +26,11 @@
       "url": "https://github.com/leobalter/DexterJS/blob/master/LICENSE-GPL"
     }
   ],
+  "files": [
+    "dist"
+  ],
   "dependencies": {},
-  "keywords": [],
+  "keywords": [ "javascript" ],
   "scripts": {
     "ci": "grunt -v jshint qunit nodeunit coveralls",
     "test": "grunt -v jshint qunit nodeunit"
