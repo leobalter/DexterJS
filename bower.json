@@ -1,6 +1,6 @@
 {
     "name": "dexter",
-    "version": "0.4.3",
+    "version": "0.5.0",
     "description": "Dexter is a simple Test Helper to mock methods and to fake the Ajax interface. It's framework independent, running with QUnit, Jasmine, Mocha, etc.",
     "main": [ "dist/dexter.js", "dist/dexter.min.js" ],
     "ignore": [

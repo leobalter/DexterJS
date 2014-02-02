@@ -1,0 +1,90 @@
+CHANGELOG
+----------------------
+
+[0.5.0]
+ * Package.json: jscs on npm scripts
+ * Package.json: setting files dir
+ * Gruntfile: adding force option to Coveralls task
+ * updating dependencies
+ * Adding JSCS
+ * updating Readme
+ * Adding Coveralls.io using grunt-coveralls pkg
+ * fix error when module is undefined; close #13
+ * Add a Bitdeli badge to README
+ * environment support on README.md
+
+[0.4.3]
+ * fix indentation
+ * Add .text for IE8-
+ * test/Dexter.html -> test/index.html
+ * cleaning .gitignore
+ * removing coverage/.gitkeep
+ * removing old IE support (xhr from ActiveXObject)
+ * DRY on fakeXHR
+ * whitespace: function() to function ()
+ * whitespace
+ * refactoring modules
+ * updated grunt-contrib-jshint to 0.8.0
+
+[0.4.2]
+ * setting node 0.8 to test in travis
+ * removing karma.js
+ * adding nodeunit tests on npm test (Travis)
+
+[0.4.1]
+ * ignoring bower.json on bower.json
+ * qunit updated to 1.12
+ * version on package.json
+ * typo in README.md
+ * returning dist files
+ * Nodejs compatible and tests
+
+[0.4.0]
+ * Contributing.md link
+ * moving the documentation to the repo with mdoc
+ * Dont commit genereted code
+ * Add editorconfig file
+ * Generated files of the previous commit
+ * Fix identation and guideline inconsistencies
+ * Dexter.restore()
+ * stub => fake
+ * whitespace
+ * indentation 2 => 4
+ * testing karma configuration to run unit tests on travis' Firefox
+ * adding karma for CI. Aka: satisfying my curiosity on how it works and integrates with Travis CI
+ * fixing package name
+
+[0.3.1]
+ * adjusing pkg name to register it on npm
+ * setting verbosity on qunit tests in package.json
+ * updated README file and also got some coverage files comming along
+ * travis seal
+ * pushing some code
+ * integrating with travis
+ * now using istanbul for tests coverage, reports are also in the commit
+ * updated grunt to 0.4.2, package json, version, etc
+ * 0.2.1 lint and build
+ * Update README.md
+ * syncXHR calls and fakeXHR.spy
+ * changing spy vs callback order
+ * spy preventing returned value
+ * stub return value
+ * Improving documentation
+ * fixing grunt.js to build Dexter.js
+ * restoring stubs and spies used on tests
+ * fakeXHR tested, Dexter rebuilt
+ * new methods (not tested yet)
+ * IE7 fixes (...)
+ * more comments documentating fake ajax code
+ * fakeXHR code comments
+ * fakeXHR second partial commit
+ * fakeXHR initial developement and minor changes on tests
+ * Applying @rwldrn's advices.
+ * now spy callback is really on (and properly tested).
+ * fixing typo (ref #1)
+ * recovering minified file
+ * callback now working and tested with Dexter.spy
+ * some "documentation" on read me
+ * renaming toReturn to callback
+ * updating Readme with some examples and fixes
+ * First commit. Tested and working.
