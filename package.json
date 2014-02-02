@@ -32,8 +32,8 @@
   "dependencies": {},
   "keywords": [ "javascript" ],
   "scripts": {
-    "ci": "grunt -v jshint qunit nodeunit coveralls",
-    "test": "grunt -v jshint qunit nodeunit"
+    "ci": "grunt -v jshint jscs qunit nodeunit coveralls",
+    "test": "grunt -v jshint jscs qunit nodeunit"
   },
   "devDependencies": {
     "grunt": "0.4.2",
