@@ -7,10 +7,15 @@ Dexter is a simple Test Helper to mock and spy methods and to fake the Ajax inte
 
 ## Getting Started
 
-Download the [production version][min] or the [development version][max].
+Download the [minified version][min] or the [development version][max].
 
 [min]: https://raw.github.com/leobalter/DexterJS/master/dist/dexter.min.js
 [max]: https://raw.github.com/leobalter/DexterJS/master/dist/dexter.js
+
+You may also install Dexter from **NPM** or **Bower**:
+
+- NPM: `npm install --save-dev dexter`
+- Bower: `bower install --save-dev dexter`
 
 ## Support
 
@@ -27,6 +32,7 @@ Dexter is supported and tested on:
 
 ### Mobile
 - Firefox for Android 23+
+- Firefox OS
 - Chrome (Android)
 - iOS 6+
 
