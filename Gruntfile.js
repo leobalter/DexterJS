@@ -38,7 +38,7 @@ module.exports = function( grunt ) {
                 '--web-security': 'no',
                 coverage: {
                     src: [ 'src/**/*.js' ],
-                    instrumentedFiles: 'test/temp',
+                    instrumentedFiles: 'build/temp',
                     htmlReport: 'build/report/coverage',
                     lcovReport: 'build/report/lcov',
                     linesThresholdPct: 80
