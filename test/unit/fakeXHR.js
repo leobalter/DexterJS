@@ -43,7 +43,7 @@ QUnit.test( 'XMLHttpRequest/ActiveXObject substitutions (also restoring)', funct
         assert.strictEqual( typeof( XMLHttpRequest.prototype.__DexterXHR ), 'undefined', 'untouched ActiveXObject' );
 
         myFake = Dexter.fakeXHR();
-        assert.ok( XMLHttpRequest.prototype.__DexterXHR, 'Dexter fakes ActiveXObject' ); 
+        assert.ok( XMLHttpRequest.prototype.__DexterXHR, 'Dexter fakes ActiveXObject' );
 
         myFake.restore();
         assert.strictEqual( typeof( XMLHttpRequest.prototype.__DexterXHR ), 'undefined', 'original ActiveXObject after .restore() ' );
@@ -69,7 +69,7 @@ QUnit.test( 'registering requests', function( assert ) {
     assert.strictEqual( myFake.requests[1], xhr2, 'myFake.requests[0] === xhr object' );
 
     myFake.restore();
-}); 
+});
 
 QUnit.test( 'fakeXHR.respond without index', function( assert ) {
     expect( 4 );
@@ -77,8 +77,8 @@ QUnit.test( 'fakeXHR.respond without index', function( assert ) {
     var myFake = Dexter.fakeXHR(),
         xhr = this.getXHR(),
         fake = Dexter.fake( xhr, '__DexterRespond' ),
-        params = { 
-            body: 'foo' 
+        params = {
+            body: 'foo'
         };
 
     fake.callback = function( arg ) {
@@ -105,7 +105,7 @@ QUnit.test( 'fakeXHR.respond with index', function( assert ) {
     var myFake = Dexter.fakeXHR(),
         xhr = this.getXHR(),
         xhr2 = this.getXHR(),
-        fake = Dexter.fake( xhr2, '__DexterRespond' ); 
+        fake = Dexter.fake( xhr2, '__DexterRespond' );
 
     fake.callback = function() {
         assert.strictEqual( this, xhr2, '__DexterRespond this === xhr' );
@@ -119,7 +119,7 @@ QUnit.test( 'fakeXHR.respond with index', function( assert ) {
 
     assert.deepEqual( myFake.doneRequests, [], 'doneRequests === []' );
 
-    myFake.respond( { body: 'foo' }, 1 );    
+    myFake.respond( { body: 'foo' }, 1 );
 
     assert.strictEqual( myFake.doneRequests[ 0 ], xhr2, 'doneRequests receives xhr object' );
 

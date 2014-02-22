@@ -1,17 +1,29 @@
 {
+    "boss": true,
     "curly": true,
     "quotmark": "single",
     "indent" : 4,
     "eqeqeq": true,
+    "eqnull": true,
+    "expr": true,
     "immed": true,
     "latedef": true,
     "newcap": true,
     "noarg": true,
+    "onevar": true,
+    "quotmark": "single",
     "sub": true,
     "undef": true,
     "unused": true,
-    "boss": true,
-    "eqnull": true,
-    "node": true,
-    "predef": [ "window", "document", "ActiveXObject", "XMLHttpRequest" ]
+    "smarttabs": true,
+    "trailing": true,    
+    
+    "browser": true,
+
+    "globals": {
+        "module": false,
+        "ActiveXObject": true,
+        "require": true,
+        "exports": true
+    }
 }

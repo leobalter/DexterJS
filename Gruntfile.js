@@ -1,5 +1,5 @@
-'use strict';
 module.exports = function( grunt ) {
+    'use strict';
 
     // Project configuration.
     grunt.initConfig({
@@ -106,7 +106,7 @@ module.exports = function( grunt ) {
         'grunt-contrib-watch',
         'grunt-coveralls',
         'grunt-jscs-checker',
-        'grunt-qunit-istanbul',
+        'grunt-qunit-istanbul'
     ].forEach( function( task ) {
         grunt.loadNpmTasks( task );
     });

@@ -5,8 +5,9 @@
  * Copyright (c) 2012 Leonardo Balter
  * Licensed under the MIT, GPL licenses.
  */
-'use strict';
 (function() {
+    'use strict';
+
     var Dexter = {
             stored: []
         },
