@@ -3,119 +3,121 @@
 
 (function() {
 
-    var Dexter;
+	'use strict';
 
-    // NPM scope
-    if ( !Dexter && typeof module !== 'undefined' && module.exports ) {
-        Dexter = require( '../../src/Dexter.js' );
-    } else {
-        Dexter = window.Dexter;
-    }
+	var Dexter;
 
-    QUnit.module( 'Dexter Spy', {
-        setup: function( assert ) {
-            this.foo = {};
-            this.foo.bar = function() {
-                assert.ok( true, 'spy preserve method calling' );
-                return 'foo!';
-            };
-            this.spy = Dexter.spy( this.foo, 'bar' );
-        },
-        teardown: function() {
-            Dexter.restore();
-        }
-    });
+	// NPM scope
+	if ( !Dexter && typeof module !== 'undefined' && module.exports ) {
+		Dexter = require( '../../src/Dexter.js' );
+	} else {
+		Dexter = window.Dexter;
+	}
 
-    QUnit.test( 'returned object', function( assert ) {
-        expect( 5 );
+	QUnit.module( 'Dexter Spy', {
+		setup: function( assert ) {
+			this.foo = {};
+			this.foo.bar = function() {
+				assert.ok( true, 'spy preserve method calling' );
+				return 'foo!';
+			};
+			this.spy = Dexter.spy( this.foo, 'bar' );
+		},
+		teardown: function() {
+			Dexter.restore();
+		}
+	});
 
-        assert.equal( typeof( this.spy ), 'object', 'Dexter.spy returns and object' );
-        assert.ok( this.spy.isActive, 'spy.isActive === true' );
+	QUnit.test( 'returned object', function( assert ) {
+		expect( 5 );
 
-        assert.throws(function() {
-            Dexter.spy( this.foo, 'whateverDoesntExist' );
-        }, 'raises an error if method doesnt exist' );
-        
-        assert.throws(function() {
-            Dexter.spy();
-        }, 'raises an error without arguments' );
+		assert.equal( typeof( this.spy ), 'object', 'Dexter.spy returns and object' );
+		assert.ok( this.spy.isActive, 'spy.isActive === true' );
 
-        assert.throws(function() {
-            Dexter.spy( this.foo, function() {} );
-        }, 'raises an error if method name isn\'t a string' );
+		assert.throws(function() {
+			Dexter.spy( this.foo, 'whateverDoesntExist' );
+		}, 'raises an error if method doesnt exist' );
 
-    });
+		assert.throws(function() {
+			Dexter.spy();
+		}, 'raises an error without arguments' );
 
-    QUnit.test( 'restore()', function( assert ) {
-        expect( 3 );
+		assert.throws(function() {
+			Dexter.spy( this.foo, function() {} );
+		}, 'raises an error if method name isn\'t a string' );
 
-        this.spy.restore();
+	});
 
-        this.foo.bar();
+	QUnit.test( 'restore()', function( assert ) {
+		expect( 3 );
 
-        assert.deepEqual( this.spy.called, 0, 'restored spy should not be affected by further calls' );
-        assert.deepEqual( this.spy.isActive, false, 'spy.isActive === false after restoring' );
-    });
+		this.spy.restore();
 
-    QUnit.test( 'call count', function( assert ) {
-        expect( 22 );
+		this.foo.bar();
 
-        for ( var i = 0 ; i < 11 ; ++i ) {
-            assert.deepEqual( this.spy.called, i, 'spy.called === ' + i );
-            this.foo.bar();
-        }
-    });
+		assert.deepEqual( this.spy.called, 0, 'restored spy should not be affected by further calls' );
+		assert.deepEqual( this.spy.isActive, false, 'spy.isActive === false after restoring' );
+	});
 
-    QUnit.test( 'arguments', function( assert ) {
-        expect( 1 );
+	QUnit.test( 'call count', function( assert ) {
+		expect( 22 );
 
-        this.foo.otherBar = function( a, b, c ) {
-            assert.deepEqual( [ a, b, c ], [ 'Dexter', 'is', 'here!' ], 'keeping arguments in the spied call' );
-        };
+		for ( var i = 0 ; i < 11 ; ++i ) {
+			assert.deepEqual( this.spy.called, i, 'spy.called === ' + i );
+			this.foo.bar();
+		}
+	});
 
-        var spy = Dexter.spy( this.foo, 'otherBar' );
+	QUnit.test( 'arguments', function( assert ) {
+		expect( 1 );
 
-        this.foo.otherBar( 'Dexter', 'is', 'here!' );
+		this.foo.otherBar = function( a, b, c ) {
+			assert.deepEqual( [ a, b, c ], [ 'Dexter', 'is', 'here!' ], 'keeping arguments in the spied call' );
+		};
 
-        spy.restore();
-    });
+		var spy = Dexter.spy( this.foo, 'otherBar' );
 
-    QUnit.test( 'callback()', function( assert ) {
-        expect( 6 );
+		this.foo.otherBar( 'Dexter', 'is', 'here!' );
 
-        this.spy.callback = function( a, b, c ) {
-            assert.ok( true, '.callback is set' );
-            assert.deepEqual( [ a, b, c ], [ 1, 2, 3 ], 'callback arguments working' );
-        };
+		spy.restore();
+	});
 
-        this.foo.bar( 1, 2, 3 );
+	QUnit.test( 'callback()', function( assert ) {
+		expect( 6 );
 
-        this.spy.restore();
+		this.spy.callback = function( a, b, c ) {
+			assert.ok( true, '.callback is set' );
+			assert.deepEqual( [ a, b, c ], [ 1, 2, 3 ], 'callback arguments working' );
+		};
 
-        this.spy = Dexter.spy( this.foo, 'bar', function() {
-            assert.ok( true, 'callback can be set at spy creation' );
-            return 'bar!';
-        });
+		this.foo.bar( 1, 2, 3 );
 
-        assert.strictEqual( this.foo.bar(), 'foo!', 'spy preserves returned value' );
-    });
+		this.spy.restore();
 
-    QUnit.test( 'callback() order', function( assert ) {
-        expect( 1 );
+		this.spy = Dexter.spy( this.foo, 'bar', function() {
+			assert.ok( true, 'callback can be set at spy creation' );
+			return 'bar!';
+		});
 
-        var foo = '';
+		assert.strictEqual( this.foo.bar(), 'foo!', 'spy preserves returned value' );
+	});
 
-        Dexter.__bar__ = function() {
-            foo = 'a';
-        };
+	QUnit.test( 'callback() order', function( assert ) {
+		expect( 1 );
 
-        Dexter.spy( Dexter, '__bar__', function() {
-            foo += 'b';
-        });
+		var foo = '';
 
-        Dexter.__bar__();
+		Dexter.__bar__ = function() {
+			foo = 'a';
+		};
 
-        assert.strictEqual( foo, 'ab', 'callback called after spied function' );
-    });
+		Dexter.spy( Dexter, '__bar__', function() {
+			foo += 'b';
+		});
+
+		Dexter.__bar__();
+
+		assert.strictEqual( foo, 'ab', 'callback called after spied function' );
+	});
 
 }());

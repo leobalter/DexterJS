@@ -23,6 +23,8 @@
         "ActiveXObject": true,
         "require": true,
         "exports": true,
-        "define": true
+        "define": true,
+        "setTimeout": true,
+        "setInterval": true
     }
 }
