@@ -103,4 +103,11 @@
         module.exports = Dexter;
     }
 
+    // amd Enviroments, client and server side
+    if ( typeof define === 'function' && define.amd ) {
+        define( 'dexter', [], function() {
+            return Dexter;
+        });
+    }
+
 }());

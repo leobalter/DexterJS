@@ -16,14 +16,15 @@
     "undef": true,
     "unused": true,
     "smarttabs": true,
-    "trailing": true,    
-    
+    "trailing": true,
+
     "browser": true,
 
     "globals": {
         "module": false,
         "ActiveXObject": true,
         "require": true,
-        "exports": true
+        "exports": true,
+        "define": true
     }
 }

@@ -1,8 +1,9 @@
-/*! DexterJS - v0.5.0 - 2014-02-02
+/*! DexterJS - v0.5.1 - 2014-02-26
  * https://github.com/leobalter/DexterJS
  * Copyright (c) 2014 Leonardo Balter; Licensed MIT, GPL */
-'use strict';
 (function() {
+    'use strict';
+
     var Dexter = {
             stored: []
         },
@@ -96,6 +97,13 @@
     } else {
         // for CommonJS environments, export everything
         module.exports = Dexter;
+    }
+
+    // amd Enviroments, client and server side
+    if ( typeof define === 'function' && define.amd ) {
+        define( 'dexter', [], function() {
+            return Dexter;
+        });
     }
 
 }());

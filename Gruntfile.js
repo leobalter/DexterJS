@@ -25,7 +25,8 @@ module.exports = function( grunt ) {
         uglify: {
             options: {
                 banner: '<%= banner %>',
-                codegen: { ascii_only: true }
+                codegen: { ascii_only: true },
+                sourceMap: true
             },
             dist: {
                 dest: 'dist/<%= pkg.name %>.min.js',
