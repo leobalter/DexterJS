@@ -47,6 +47,6 @@ You are welcome to join us on the list of [contributors](https://github.com/leob
 Please, check the [Contributing](https://github.com/leobalter/DexterJS/blob/master/docs/Contributing.md) documentation, there're just a few steps.
 
 ## License
-Copyright (c) 2012 Leonardo Balter
+Copyright (c) 2014 Leonardo Balter
 Licensed under the MIT and GPL licenses.
 
