@@ -95,19 +95,20 @@
     Dexter.fake = createDexterObj( 'fake' );
     Dexter.restore = restoreAll;
 
-    // referencing to the global scope
-    if ( typeof module === 'undefined' || typeof module.exports === 'undefined' ) {
-        window.Dexter = Dexter;
-    } else {
-        // for CommonJS environments, export everything
-        module.exports = Dexter;
-    }
+    if ( typeof module !== 'undefined' && module.exports ) {
 
-    // amd Enviroments, client and server side
-    if ( typeof define === 'function' && define.amd ) {
+        // For CommonJS environments, export everything
+        module.exports = Dexter;
+    } else if ( typeof define === 'function' && define.amd ) {
+
+        // amd Enviroments, client and server side
         define( 'dexter', [], function() {
             return Dexter;
         });
+    } else if ( typeof window !== 'undefined' ) {
+
+        // Old school
+        window.Dexter = Dexter;
     }
 
 }());

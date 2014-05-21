@@ -1,4 +1,4 @@
-/*! DexterJS - v0.5.1 - 2014-02-26
+/*! DexterJS - v0.5.1 - 2014-05-20
  * https://github.com/leobalter/DexterJS
  * Copyright (c) 2014 Leonardo Balter; Licensed MIT, GPL */
 (function() {
@@ -91,25 +91,26 @@
     Dexter.fake = createDexterObj( 'fake' );
     Dexter.restore = restoreAll;
 
-    // referencing to the global scope
-    if ( typeof module === 'undefined' || typeof module.exports === 'undefined' ) {
-        window.Dexter = Dexter;
-    } else {
-        // for CommonJS environments, export everything
-        module.exports = Dexter;
-    }
+    if ( typeof module !== 'undefined' && module.exports ) {
 
-    // amd Enviroments, client and server side
-    if ( typeof define === 'function' && define.amd ) {
+        // For CommonJS environments, export everything
+        module.exports = Dexter;
+    } else if ( typeof define === 'function' && define.amd ) {
+
+        // amd Enviroments, client and server side
         define( 'dexter', [], function() {
             return Dexter;
         });
+    } else if ( typeof window !== 'undefined' ) {
+
+        // Old school
+        window.Dexter = Dexter;
     }
 
 }());
 
-(function() {
-    var Dexter, globalObj,
+(function( globalObj ) {
+    var Dexter,
         statusCodes, unsafeHeaders, fakeXHRObj, CreateFakeXHR,
         ajaxObjs = {};
 
@@ -127,21 +128,25 @@
         }
     }());
 
-    if ( ajaxObjs.xhr ) {
-        Dexter = window.Dexter;
-        globalObj = window;
-    } else {
-        // no need to setup fakeXHR for node environment
+    if ( typeof module !== 'undefined' && module.exports ) {
+
+        // For CommonJS environments, export everything
         module.exports = function() { return {}; };
         return false;
-    }
+    } else if ( ajaxObjs.xhr ) {
+        if ( typeof define === 'function' && define.amd ) {
 
-    /***
-     * this exports the fakeXHR method to Dexter.
-     ***/
-    Dexter.fakeXHR = function() {
-        return new CreateFakeXHR();
-    };
+            // amd Enviroments, client and server side
+            define( 'fakeXHR', [], function() {
+                return new CreateFakeXHR();
+            });
+        } else {
+            Dexter = window.Dexter;
+            Dexter.fakeXHR = function() {
+                return new CreateFakeXHR();
+            };
+        }
+    }
 
     // Status code and their respective texts
     statusCodes = {
@@ -209,21 +214,6 @@
         'User-Agent',
         'Via'
     ];
-
-    // IE7
-    if ( typeof( Array.prototype.indexOf ) === 'undefined' ) {
-        unsafeHeaders.indexOf = function( key, start ) {
-            var i = ( start || 0 ),
-                    length = this.length;
-
-            for ( ; i < length ; i++ ) {
-                if ( this[ i ] === key ) {
-                    return i;
-                }
-            }
-            return -1;
-        };
-    }
 
     /***
      * verifyState helps verifying XHR readyState in cases when that should be
@@ -640,4 +630,7 @@
         }
     };
 
-}());
+// Get a reference to the global object, like window in browsers
+}( (function() {
+    return this;
+})() ));
