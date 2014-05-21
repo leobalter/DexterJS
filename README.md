@@ -1,4 +1,4 @@
-# Dexter JS 0.5.1
+# Dexter JS
 
 Dexter is a simple Test Helper to mock and spy methods and to fake the Ajax interface. It's framework independent, running with QUnit, Jasmine, Mocha, etc.
 
@@ -27,7 +27,7 @@ Dexter is supported and tested on:
 ### Desktop
 - Firefox 4+
 - Chrome 18+
-- Internet Explorer 8+
+- Internet Explorer 9+
 - Safari 7+ (Mac OS)
 
 ### Mobile
