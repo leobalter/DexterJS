@@ -47,6 +47,14 @@ module.exports = function( grunt ) {
             },
             all: [ 'test/*.html' ]
         },
+        qunitnode: {
+            all: [
+                'test/unit/environment.js',
+                'test/unit/spy.js',
+                'test/unit/fake.js',
+                'test/unit/restore.js'
+            ]
+        },
         coveralls: {
             options: {
                 force: true
@@ -55,9 +63,6 @@ module.exports = function( grunt ) {
                 // LCOV coverage file relevant to every target
                 src: 'build/report/lcov/lcov.info'
             }
-        },
-        nodeunit: {
-            all: [ 'test/test-node.js' ]
         },
         jshint: {
             options: {
@@ -102,11 +107,11 @@ module.exports = function( grunt ) {
     [
         'grunt-contrib-concat',
         'grunt-contrib-jshint',
-        'grunt-contrib-nodeunit',
         'grunt-contrib-uglify',
         'grunt-contrib-watch',
         'grunt-coveralls',
         'grunt-jscs-checker',
+        'grunt-qunitnode',
         'grunt-qunit-istanbul'
     ].forEach( function( task ) {
         grunt.loadNpmTasks( task );
@@ -125,6 +130,6 @@ module.exports = function( grunt ) {
     });
 
     // Default task.
-    grunt.registerTask( 'default', 'jshint jscs qunit concat uglify nodeunit'.split( ' ' ) );
+    grunt.registerTask( 'default', 'jshint jscs qunit qunitnode concat uglify'.split( ' ' ) );
 
 };

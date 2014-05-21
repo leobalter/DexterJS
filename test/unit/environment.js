@@ -1,19 +1,27 @@
 /* API Ref: http://api.qunitjs.com */
-/* globals Dexter:true, QUnit: true, expect: true */
+/* globals QUnit: true */
 
-QUnit.module( 'Environment' );
+(function() {
 
-QUnit.test( 'Dexter is here!', function( assert ) {
-    expect( 2 );
+	var Dexter;
 
-    assert.equal( typeof( Dexter ), 'object', 'Dexter is an object' );
-    assert.ok( Dexter, 'Dexter is not falsy' );
-});
+	// NPM scope
+	if ( !Dexter && typeof module !== 'undefined' && module.exports ) {
+	    Dexter = require( '../../src/Dexter.js' );
+	} else {
+	    Dexter = window.Dexter;
+	}
 
-QUnit.test( 'Dexter functions', function( assert ) {
-    expect( 3 );
+	QUnit.module( 'Environment' );
 
-    assert.equal( typeof( Dexter.spy ), 'function', 'Dexter.spy is a function' );
-    assert.equal( typeof( Dexter.fake ), 'function', 'Dexter.fake is a function' );
-    assert.equal( typeof( Dexter.fakeXHR ), 'function', 'Dexter.fakeXHR is a function' );
-});
+	QUnit.test( 'Dexter is here!', function( assert ) {
+	    assert.equal( typeof( Dexter ), 'object', 'Dexter is an object' );
+	    assert.ok( Dexter, 'Dexter is not falsy' );
+	});
+
+	QUnit.test( 'Dexter functions', function( assert ) {
+	    assert.equal( typeof( Dexter.spy ), 'function', 'Dexter.spy is a function' );
+	    assert.equal( typeof( Dexter.fake ), 'function', 'Dexter.fake is a function' );
+	});
+
+}());

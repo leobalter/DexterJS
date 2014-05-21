@@ -39,19 +39,19 @@
     "bdd"
   ],
   "scripts": {
-    "ci": "grunt -v jshint jscs qunit nodeunit coveralls",
-    "test": "grunt -v jshint jscs qunit nodeunit"
+    "ci": "grunt -v jshint jscs qunit qunitnode coveralls",
+    "test": "grunt -v jshint jscs qunit qunitnode"
   },
   "devDependencies": {
     "grunt": "0.4.2",
     "grunt-contrib-concat": "0.3.0",
     "grunt-contrib-jshint": "0.8.0",
-    "grunt-contrib-nodeunit": "0.3.2",
     "grunt-contrib-uglify": "0.3.2",
     "grunt-contrib-watch": "0.5.3",
     "grunt-coveralls": "0.3.0",
     "grunt-jscs-checker": "0.4.0",
     "grunt-qunit-istanbul": "0.3.0",
+    "grunt-qunitnode": "0.1.2",
     "mdoc": "0.3.4",
     "qunitjs": "1.14.0",
     "requirejs": "2.1.11"
