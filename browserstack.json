@@ -1,0 +1,20 @@
+{
+	"username": "BROWSERSTACK_USERNAME",
+	"key": "BROWSERSTACK_KEY", 
+	"test_framework": "qunit",
+	"test_path": ["test/index.html"],
+	"browsers": [
+		"chrome_previous",
+		"chrome_latest",
+		"firefox_previous",
+		"firefox_latest",
+		"opera_previous",
+		"opera_latest",
+		"safari_previous",
+		"safari_latest",
+		"ie_8",
+		"ie_9",
+		"ie_10",
+		"ie_11"
+	]
+}
