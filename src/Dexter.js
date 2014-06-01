@@ -6,109 +6,109 @@
  * Licensed under the MIT, GPL licenses.
  */
 (function() {
-    'use strict';
+'use strict';
 
-    var Dexter = {
-            stored: []
-        },
-        restore, actions;
+var Dexter = {
+        stored: []
+    },
+    restore, actions;
 
-    restore = function() {
-        this._seenObj[ this._seenMethod ] = this._oldCall;
-        this.isActive = false;
+restore = function() {
+    this._seenObj[ this._seenMethod ] = this._oldCall;
+    this.isActive = false;
+};
+
+function setDexterObjs( scope, obj, method ) {
+    scope._oldCall = obj[ method ];
+    scope._seenObj = obj;
+    scope._seenMethod = method;
+}
+
+actions = {
+    'spy': function( that, args ) {
+        // call order issues
+        var returned = that._oldCall.apply( this, args );
+
+        if ( typeof( that.callback ) === 'function' ) {
+            that.callback.apply( this, args );
+        }
+        // calls the original method
+        return returned;
+    },
+    'fake': function( that, args ) {
+        if ( typeof( that.callback ) === 'function' ) {
+            return that.callback.apply( this, args );
+        }
+    }
+};
+
+function DexterObj( action, obj, method, callback ) {
+    var that = this;
+    this.called = 0;
+    this.isActive = true;
+
+    if ( typeof( method ) !== 'string' ) {
+        throw 'Dexter should receive method name as a String';
+    }
+
+    if ( !obj || typeof( obj[ method ] ) !== 'function' ) {
+        throw 'Dexter should receive a valid object and method combination in arguments. Ex.: window & "alert".';
+    }
+
+    if ( typeof( callback ) === 'function' ) {
+        this.callback = callback;
+    }
+
+    setDexterObjs( this, obj, method );
+
+    obj[ method ] = function() {
+        var args = [].slice.apply( arguments );
+
+        that.called = that.called + 1;
+
+        return actions[ action ].call( this, that, args );
     };
+}
 
-    function setDexterObjs( scope, obj, method ) {
-        scope._oldCall = obj[ method ];
-        scope._seenObj = obj;
-        scope._seenMethod = method;
-    }
+function createDexterObj( name ) {
+    return function( obj, method, callback ) {
+        var newObj = new DexterObj( name, obj, method, callback );
+        Dexter.stored.push( newObj );
 
-    actions = {
-        'spy': function( that, args ) {
-            // call order issues
-            var returned = that._oldCall.apply( this, args );
-
-            if ( typeof( that.callback ) === 'function' ) {
-                that.callback.apply( this, args );
-            }
-            // calls the original method
-            return returned;
-        },
-        'fake': function( that, args ) {
-            if ( typeof( that.callback ) === 'function' ) {
-                return that.callback.apply( this, args );
-            }
-        }
+        return newObj;
     };
+}
 
-    function DexterObj( action, obj, method, callback ) {
-        var that = this;
-        this.called = 0;
-        this.isActive = true;
-
-        if ( typeof( method ) !== 'string' ) {
-            throw 'Dexter should receive method name as a String';
-        }
-
-        if ( !obj || typeof( obj[ method ] ) !== 'function' ) {
-            throw 'Dexter should receive a valid object and method combination in arguments. Ex.: window & "alert".';
-        }
-
-        if ( typeof( callback ) === 'function' ) {
-            this.callback = callback;
-        }
-
-        setDexterObjs( this, obj, method );
-
-        obj[ method ] = function() {
-            var args = [].slice.apply( arguments );
-
-            that.called = that.called + 1;
-
-            return actions[ action ].call( this, that, args );
-        };
+function restoreAll() {
+    while ( Dexter.stored.length ) {
+        Dexter.stored.pop().restore();
     }
 
-    function createDexterObj( name ) {
-        return function( obj, method, callback ) {
-            var newObj = new DexterObj( name, obj, method, callback );
-            Dexter.stored.push( newObj );
+    return Dexter.stored.length === 0;
+}
 
-            return newObj;
-        };
-    }
+DexterObj.prototype = {
+    restore: restore
+};
 
-    function restoreAll() {
-        while ( Dexter.stored.length ) {
-            Dexter.stored.pop().restore();
-        }
+Dexter.spy = createDexterObj( 'spy' );
+Dexter.fake = createDexterObj( 'fake' );
+Dexter.restore = restoreAll;
 
-        return Dexter.stored.length === 0;
-    }
+if ( typeof module !== 'undefined' && module.exports ) {
 
-    DexterObj.prototype = {
-        restore: restore
-    };
+    // For CommonJS environments, export everything
+    module.exports = Dexter;
+} else if ( typeof define === 'function' && define.amd ) {
 
-    Dexter.spy = createDexterObj( 'spy' );
-    Dexter.fake = createDexterObj( 'fake' );
-    Dexter.restore = restoreAll;
+    // amd Enviroments, client and server side
+    define( 'dexter', [], function() {
+        return Dexter;
+    });
+} else if ( typeof window !== 'undefined' ) {
 
-    if ( typeof module !== 'undefined' && module.exports ) {
-
-        // For CommonJS environments, export everything
-        module.exports = Dexter;
-    } else if ( typeof define === 'function' && define.amd ) {
-
-        // amd Enviroments, client and server side
-        define( 'dexter', [], function() {
-            return Dexter;
-        });
-    } else if ( typeof window !== 'undefined' ) {
-
-        // Old school
-        window.Dexter = Dexter;
-    }
+    // Old school
+    window.Dexter = Dexter;
+}
 
 }());
