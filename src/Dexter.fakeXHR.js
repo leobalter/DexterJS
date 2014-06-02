@@ -12,7 +12,7 @@ ajaxObjs.xhr = (function() {
     try {
         xhr = new XMLHttpRequest();
         return XMLHttpRequest;
-    } catch( e ) {
+    } catch ( e ) {
         return false;
     }
 }());
@@ -20,7 +20,9 @@ ajaxObjs.xhr = (function() {
 if ( typeof module !== 'undefined' && module.exports ) {
 
     // For CommonJS environments, export everything
-    module.exports = function() { return {}; };
+    module.exports = function() {
+        return {};
+    };
     return false;
 } else if ( ajaxObjs.xhr ) {
     if ( typeof define === 'function' && define.amd ) {
@@ -119,7 +121,7 @@ function verifyState( state, sendFlag ) {
  ***/
 function parseXML( text ) {
     var xmlDoc,
-            parser;
+        parser;
 
     if ( typeof globalObj.DOMParser !== 'undefined' ) {
         parser = new globalObj.DOMParser();
@@ -135,38 +137,38 @@ function parseXML( text ) {
 
 fakeXHRObj = {
     // Status constants
-    UNSENT:                   0,
-    OPENED:                   1,
-    HEADERS_RECEIVED:         2,
-    LOADING:                  3,
-    DONE:                     4,
+    UNSENT: 0,
+    OPENED: 1,
+    HEADERS_RECEIVED: 2,
+    LOADING: 3,
+    DONE: 4,
     // event handlers
-    onabort:                  null,
-    onerror:                  null,
-    onload:                   null,
-    onloadend:                null,
-    onloadstart:              null,
-    onprogress:               null,
-    onreadystatechange:       null,
-    ontimeout:                null,
+    onabort: null,
+    onerror: null,
+    onload: null,
+    onloadend: null,
+    onloadstart: null,
+    onprogress: null,
+    onreadystatechange: null,
+    ontimeout: null,
     // readyState always start by 0
-    readyState:               0,
+    readyState: 0,
     // other properties
-    response:                 '',
-    responseText:             '',
-    responseType:             '',
-    responseXML:              null,
-    withCredentials:          false,
+    response: '',
+    responseText: '',
+    responseType: '',
+    responseXML: null,
+    withCredentials: false,
     // status code
-    status:                   0,
+    status: 0,
     // status text relative to the status code
-    statusText:               '',
+    statusText: '',
     // timeout to be set, starts by 0
-    timeout:                  0,
+    timeout: 0,
     /***
      * fake .abort
      ***/
-    abort:                    function() {
+    abort: function() {
         // reseting properties
         this.aborted = true;
         this.errorFlag = true;
@@ -190,9 +192,9 @@ fakeXHRObj = {
     /***
      * fake .getResponseHeader
      ***/
-    getResponseHeader:       function( key ) {
+    getResponseHeader: function( key ) {
         var headerName,
-                responseHeaders = this.responseHeaders;
+            responseHeaders = this.responseHeaders;
         // no return before receiving headers
         if ( this.readyState < this.HEADERS_RECEIVED ) {
             return null;
@@ -222,9 +224,9 @@ fakeXHRObj = {
     /***
      * fake .open
      ***/
-    open:                     function( method, url, async, username, password ) {
+    open: function( method, url, async, username, password ) {
         // method and url aren´t optional
-        if ( typeof( method ) === 'undefined' || typeof( url ) === 'undefined' ) {
+        if ( typeof ( method ) === 'undefined' || typeof ( url ) === 'undefined' ) {
             throw new Error( 'Not enough arguments' );
         }
         // setting properties
@@ -233,7 +235,7 @@ fakeXHRObj = {
 
         // async default is true, so if async is undefined it is set to true,
         // otherwise async get its boolean value
-        this.async = ( typeof( async ) === 'undefined' ? true : !!async );
+        this.async = ( typeof ( async ) === 'undefined' ? true : !!async );
 
         this.username = username;
         this.password = password;
@@ -249,13 +251,13 @@ fakeXHRObj = {
     /***
      * fake .send
      ***/
-    send:                     function( data ) {
+    send: function( data ) {
         var reqHeaders;
         // readyState verification (xhr should be already opened)
         verifyState( this.readyState, this.sendFlag );
 
         if ( !/^(get|head)$/i.test( this.method ) ) {
-            if (this.requestHeaders[ 'Content-Type' ]) {
+            if ( this.requestHeaders[ 'Content-Type' ] ) {
                 reqHeaders = this.requestHeaders[ 'Content-Type' ].split( ';' );
                 this.requestHeaders[ 'Content-Type' ] = reqHeaders[ 0 ] + ';charset=utf-8';
             } else {
@@ -272,14 +274,14 @@ fakeXHRObj = {
         this.__DexterStateChange( this.OPENED );
 
         // hummm if think I won´t need this, omg, where´s the specification
-        if ( typeof( this.onSend ) === 'function' ) {
+        if ( typeof ( this.onSend ) === 'function' ) {
             this.onSend( this );
         }
     },
     /***
      * fake .setRequestHeader
      ***/
-    setRequestHeader:         function( key, value ) {
+    setRequestHeader: function( key, value ) {
         // readyState verification (xhr should be already opened)
         verifyState( this.readyState, this.sendFlag );
 
@@ -301,9 +303,9 @@ fakeXHRObj = {
     /***
      * fake getAllResponseHeaders
      ***/
-    getAllResponseHeaders:    function() {
+    getAllResponseHeaders: function() {
         var headers = '',
-                header;
+            header;
 
         if ( this.readyState < this.HEADERS_RECEIVED ) {
             return '';
@@ -340,11 +342,11 @@ fakeXHRObj = {
     /***
      * __DexterXHR indicates this is a Dexter faked XHR
      ***/
-    __DexterXHR:              true,
+    __DexterXHR: true,
     /***
      * __DexterStateChange handles events on readyState changes
      ***/
-    __DexterStateChange:      function( state ) {
+    __DexterStateChange: function( state ) {
         var ev;
         this.readyState = state;
 
@@ -362,16 +364,16 @@ fakeXHRObj = {
             }
 
             // the event goes inside an Array
-            this.onreadystatechange.call( this, [ ev ] );
+            this.onreadystatechange.call( this, [ ev ]);
         }
     },
     /***
      * __DexterSetResponseBody builds the response text.
      ***/
-    __DexterSetResponseBody:    function( body ) {
+    __DexterSetResponseBody: function( body ) {
         var chunkSize = this.chunkSize || 10,
-                index = 0,
-                type;
+            index = 0,
+            type;
 
         this.responseText = '';
 
@@ -386,12 +388,10 @@ fakeXHRObj = {
 
         type = this.getResponseHeader( 'Content-Type' ) || '';
 
-        if ( body && ( /(text\/xml)|(application\/xml)|(\+xml)/.test( type ) ) ) {
+        if ( body && ( /(text\/xml)|(application\/xml)|(\+xml)/.test( type )) ) {
             try {
                 this.responseXML = parseXML( body );
-            } catch ( e ) {
-                // Unable to parse XML
-            }
+            } catch ( e ) {}
         }
     },
     /***
@@ -402,10 +402,10 @@ fakeXHRObj = {
      *   status : Number status code (Default: 200)
      * }
      ***/
-    __DexterRespond:          function( params ) {
+    __DexterRespond: function( params ) {
         var body = params.body || '',
-                headers = params.headers || {},
-                DONE = this.DONE;
+            headers = params.headers || {},
+            DONE = this.DONE;
 
         // this should be verified to prevent recalling method
         if ( this.readyState === DONE ) {
@@ -425,14 +425,13 @@ fakeXHRObj = {
             // not being async, just set readyState value
             this.readyState = DONE;
         }
-    }
-    /***
-     * not implemented yet XHR functions
-     * upload:                   function() {},
-     * getInterface:             function() {},
-     * overrideMimeType:         function() {},
-     * sendAsBinary:             function() {}
-     ***/
+    } /***
+* not implemented yet XHR functions
+* upload:                   function() {},
+* getInterface:             function() {},
+* overrideMimeType:         function() {},
+* sendAsBinary:             function() {}
+***/
 };
 
 /***
@@ -487,7 +486,7 @@ CreateFakeXHR.prototype = {
         params = params || {};
         if ( index ) {
             // if index number is set return that indexed element
-            xhr = this.requests.splice( index, 1 )[0];
+            xhr = this.requests.splice( index, 1 )[ 0 ];
         } else {
             // else it gets the first request in line
             xhr = this.requests.shift();

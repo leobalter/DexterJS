@@ -29,14 +29,14 @@ actions = {
         // call order issues
         var returned = that._oldCall.apply( this, args );
 
-        if ( typeof( that.callback ) === 'function' ) {
+        if ( typeof ( that.callback ) === 'function' ) {
             that.callback.apply( this, args );
         }
         // calls the original method
         return returned;
     },
     'fake': function( that, args ) {
-        if ( typeof( that.callback ) === 'function' ) {
+        if ( typeof ( that.callback ) === 'function' ) {
             return that.callback.apply( this, args );
         }
     }
@@ -47,15 +47,15 @@ function DexterObj( action, obj, method, callback ) {
     this.called = 0;
     this.isActive = true;
 
-    if ( typeof( method ) !== 'string' ) {
+    if ( typeof ( method ) !== 'string' ) {
         throw 'Dexter should receive method name as a String';
     }
 
-    if ( !obj || typeof( obj[ method ] ) !== 'function' ) {
+    if ( !obj || typeof ( obj[ method ] ) !== 'function' ) {
         throw 'Dexter should receive a valid object and method combination in arguments. Ex.: window & "alert".';
     }
 
-    if ( typeof( callback ) === 'function' ) {
+    if ( typeof ( callback ) === 'function' ) {
         this.callback = callback;
     }
 
@@ -110,5 +110,4 @@ if ( typeof module !== 'undefined' && module.exports ) {
     // Old school
     window.Dexter = Dexter;
 }
-
 }());
