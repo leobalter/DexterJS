@@ -38,7 +38,7 @@ Dexter is supported and tested on:
 
 ## Documentation
 
-The project documentation files are located in https://raw.github.com/leobalter/DexterJS/master/docs
+The project documentation files are located in https://github.com/leobalter/DexterJS/tree/master/docs
 
 ## The Contributors Hall
 
