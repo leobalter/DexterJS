@@ -40,6 +40,16 @@ Dexter is supported and tested on:
 
 The project documentation files are located in https://github.com/leobalter/DexterJS/tree/master/docs
 
+## Build
+
+Install Grunt and external dependencies. First, install the grunt-cli if you haven't before. This should be installed globally (like this: `npm install -g grunt-cli bower`). Then:
+
+	npm install
+
+Build distribution files.
+
+	grunt -v
+
 ## The Contributors Hall
 
 You are welcome to join us on the list of [contributors](https://github.com/leobalter/DexterJS/graphs/contributors) for this project on *Github*.
