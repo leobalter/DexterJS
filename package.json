@@ -2,7 +2,7 @@
   "name": "dexter",
   "title": "DexterJS",
   "description": "Dexter is a simple Test Helper to mock methods and to fake the Ajax interface. It's framework independent, running with QUnit, Jasmine, Mocha, etc.",
- "version": "0.5.4",
+  "version": "0.5.4",
   "homepage": "https://github.com/leobalter/DexterJS",
   "author": {
     "name": "Leonardo Balter",
@@ -39,19 +39,19 @@
     "bdd"
   ],
   "scripts": {
-    "ci": "grunt -v jshint jscs qunit qunitnode coveralls",
-    "test": "grunt -v jshint jscs qunit qunitnode"
+    "ci": "grunt jshint jscs qunit coveralls && grunt qunitnode",
+    "test": "grunt jshint jscs qunit qunitnode"
   },
   "devDependencies": {
-    "grunt": "0.4.2",
-    "grunt-contrib-concat": "0.3.0",
+    "grunt": "^0.4.5",
+    "grunt-contrib-concat": "^0.5.0",
     "grunt-contrib-jshint": "^0.10.0",
-    "grunt-contrib-uglify": "^0.4.0",
-    "grunt-contrib-watch": "0.5.3",
-    "grunt-coveralls": "^0.3.0",
+    "grunt-contrib-uglify": "^0.6.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-coveralls": "^1.0.0",
     "grunt-jscs-checker": "^0.4.4",
     "grunt-qunit-istanbul": "^0.4.5",
-    "grunt-qunitnode": "0.1.2",
+    "grunt-qunitnode": "^0.1.2",
     "mdoc": "0.3.4",
     "qunitjs": "1.14.0",
     "requirejs": "2.1.11"
