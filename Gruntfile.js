@@ -126,6 +126,6 @@ module.exports = function( grunt ) {
 	});
 
 	// Default task.
-	grunt.registerTask( 'default', 'jshint jscs qunit concat uglify'.split( ' ' ) );
+	grunt.registerTask( 'default', 'jshint jscs qunit qunitnode concat uglify'.split( ' ' ) );
 
 };
