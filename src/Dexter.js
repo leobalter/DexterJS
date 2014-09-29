@@ -7,8 +7,6 @@
  */
 
 (function() {
-'use strict';
-
 var Dexter = {
 		stored: []
 	},

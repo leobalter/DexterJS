@@ -1,8 +1,6 @@
 /*! DexterJS - v0.5.4 -  * https://github.com/leobalter/DexterJS
  * Copyright (c) 2014 Leonardo Balter; Licensed MIT, GPL */
 (function() {
-'use strict';
-
 var Dexter = {
 		stored: []
 	},
