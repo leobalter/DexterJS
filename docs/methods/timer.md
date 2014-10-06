@@ -1,8 +1,8 @@
 # Dexter.timer()
 
-This function changes the default behaviour of setTimeout, setInterval, clearTimeout and clearInterval functions so you can manipulate the delay time through code.
+This function changes the default behaviour of setTimeout, setInterval, clearTimeout and clearInterval functions so you can manipulate time through code. The Dexter.timer() will not affect the [JavaScript timers](https://developer.mozilla.org/en-US/Add-ons/Code_snippets/Timers) that you previously declared. 
 
-Lets suppose that you set the setTimeout for 3000ms, with Dexter.timer you can use Timer.tick function to forcefully make the 3000ms advance instantly , or if you have a setInterval of 1000ms, you can forcefully make the function run as many times you want using Timer.tick()
+Lets suppose that you set the setTimeout for 3000ms, with Dexter.timer you can use Timer.tick function to forcefully make the 3000ms advance instantly, or if you have a setInterval of 1000ms, you can forcefully make the function run as many times you want using Timer.tick()
 
 ### Timer.tick(number)
 
@@ -10,7 +10,7 @@ Tick is the function that forces time advance, it receives the number of milisec
 
 ### Timer.restore()
 
-This function restores setTimeout, setInterval, clearTimeout and clearInterval to their original behaviours. 
+This function restores setTimeout, setInterval, clearTimeout and clearInterval to their original behaviours. This function will also clear all the fake setTimeouts and setIntervals, not moving them to the real world.
 
 ## Examples
 
